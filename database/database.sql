@@ -89,6 +89,8 @@ INSERT INTO `project_type` (`projectTypeId`, `name`, `description`, `disciplineI
 (1, 'Research Proposal', 'A research proposal is a document proposing a research project, generally in the sciences or academia, and generally constitutes a request for sponsorship of that research. Proposals are evaluated on the cost and potential impact of the proposed research, and on the soundness of the proposed plan for carrying it out', 7),
 (2, 'Research', 'Research is \"creative and systematic work undertaken to increase the stock of knowledge\". It involves the collection, organization and analysis of information to increase understanding of a topic or issue. A research project may be an expansion on past work in the field.', 7);
 
+
+
 CREATE TABLE `guideline`
 (
     `guidelineId` INT(10) PRIMARY KEY AUTO_INCREMENT,
@@ -97,6 +99,15 @@ CREATE TABLE `guideline`
     FOREIGN KEY (`projectTypeId`) REFERENCES project_type(`projectTypeId`)
 );
 
+
+CREATE TABLE `link`
+(
+    `linkId` INT(20) PRIMARY KEY AUTO_INCREMENT,
+    `name` TEXT NOT NULL,
+    `link` TEXT NOT NULL,
+    `guideLineId` INT(10) NOT NULL,
+    FOREIGN KEY(`guideLineId`) REFERENCES guideline(`guideLineId`)
+);
 
 
 CREATE TABLE `project_status`
@@ -119,7 +130,7 @@ INSERT INTO `project_status` (`status`) VALUES ('accepted');
 CREATE TABLE `project`
 (
     `projectId` INT(10) NOT NULL AUTO_INCREMENT,
-    `startDate` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `startDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `endDate` DATE,
     `description` VARCHAR(500), 
     `keyword` VARCHAR(255),
@@ -139,7 +150,7 @@ CREATE TABLE `project`
 CREATE TABLE `notes`
 (
     `noteId` INT(100) PRIMARY KEY AUTO_INCREMENT,
-    `startDate` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `startDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `text` TEXT NOT NULL,
     `guidelineId` INT(10),
     `projectId` INT(10) NOT NULL,
