@@ -52,16 +52,18 @@ INSERT INTO `discipline`  (`name`, `facultyId`)  VALUES ('Computer science', 2);
 
 CREATE TABLE `user`
 (
-    `userId` INT(10) PRIMARY KEY AUTO_INCREMENT,
+    `userId` INT(10) NOT NULL AUTO_INCREMENT,
     `firstName` VARCHAR(50) NOT NULL,
     `lastName` VARCHAR(50) NOT NULL,
     `email` VARCHAR(250) UNIQUE NOT NULL,
     `password` VARCHAR(16) NOT NULL,
-    `idNumber` CHAR(13) NOT NULL UNIQUE,
+    `idNumber` CHAR(13) NOT NULL,
     `title` VARCHAR(10),
     `photo` VARCHAR(255) NOT NULL DEFAULT "Get the API",
     `userType`  VARCHAR(15) NOT NULL,
     `references` INT(10),
+    PRIMARY KEY(`userId`, `idNumber`),
+    UNIQUE (`idNumber`, `userType`),
     FOREIGN KEY (`references`) REFERENCES user(`userId`)
     
 );
@@ -164,3 +166,6 @@ CREATE TABLE `notes`
     FOREIGN KEY (`projectId`) REFERENCES project(`projectId`)
 
 );
+
+
+ALTER TABLE `user` ADD UNIQUE `unique_index_for_user`(`idNumber`, `userType`);
