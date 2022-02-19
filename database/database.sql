@@ -38,15 +38,15 @@ INSERT INTO `discipline`  (`name`, `facultyId`)  VALUES ('Computer science', 2);
 
 
 
-CREATE TABLE `userType`
-(
-    `userTypeId` INT(2) PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(50) NOT NULL
-);
+-- CREATE TABLE `userType`
+-- (
+--     `userTypeId` INT(2) PRIMARY KEY AUTO_INCREMENT,
+--     `name` VARCHAR(50) NOT NULL
+-- );
 
-INSERT INTO `userType` (`name`) VALUES ('student');
-INSERT INTO `userType` (`name`) VALUES ('supervisor');
-INSERT INTO `userType` (`name`) VALUES ('admin');
+-- INSERT INTO `userType` (`name`) VALUES ('student');
+-- INSERT INTO `userType` (`name`) VALUES ('supervisor');
+-- INSERT INTO `userType` (`name`) VALUES ('admin');
 
 
 
@@ -55,23 +55,29 @@ CREATE TABLE `user`
     `userId` INT(10) PRIMARY KEY AUTO_INCREMENT,
     `firstName` VARCHAR(50) NOT NULL,
     `lastName` VARCHAR(50) NOT NULL,
-    `title` VARCHAR(10),
     `email` VARCHAR(250) UNIQUE NOT NULL,
     `password` VARCHAR(16) NOT NULL,
-    `photo` VARCHAR(255) NOT NULL DEFAULT "Get the API"
+    `idNumber` CHAR(13) NOT NULL UNIQUE,
+    `title` VARCHAR(10),
+    `photo` VARCHAR(255) NOT NULL DEFAULT "Get the API",
+    `userType`  VARCHAR(15) NOT NULL,
+    `references` INT(10),
+    FOREIGN KEY (`references`) REFERENCES user(`userId`)
     
 );
 
 
-CREATE TABLE `user_usertype`
-(
-    `userUserTypeId` INT(10) PRIMARY KEY AUTO_INCREMENT,
-    `userId` INT(10) NOT NULL,
-    `userTypeId` INT(2) NOT NULL DEFAULT 1,
-    FOREIGN KEY (`userTypeId`) REFERENCES userType(`userTypeId`),
-    FOREIGN KEY (`userId`) REFERENCES user(`userId`)
+-- CREATE TABLE `user_usertype`
+-- (
+--     `userUserTypeId` INT(10) PRIMARY KEY AUTO_INCREMENT,
+--     `userId` INT(10) NOT NULL,
+--     `email` VARCHAR(250) UNIQUE NOT NULL,
+--     `password` VARCHAR(16) NOT NULL,
+--     `userTypeId` INT(2) NOT NULL DEFAULT 1,
+--     FOREIGN KEY (`userTypeId`) REFERENCES userType(`userTypeId`),
+--     FOREIGN KEY (`userId`) REFERENCES user(`userId`)
 
-);
+-- );
 
 
 
@@ -133,7 +139,7 @@ CREATE TABLE `project`
     `startDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `endDate` DATE,
     `description` VARCHAR(500), 
-    `keyword` VARCHAR(255),
+    `keyword` VARCHAR(100),
     `name` VARCHAR(100),
     `text` LONGTEXT,
     `statusId` INT(2) NOT NULL DEFAULT 1, -- FK
