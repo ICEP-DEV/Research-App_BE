@@ -8,6 +8,7 @@ const app = express();
 
 //2 REQUIRE ROUTES
 const userRoutes = require('./routes/userRoutes')
+const projectRoutes = require("./routes/projectRoutes")
 
 
 //3 APP.USE MIDDLEWARE
@@ -21,6 +22,7 @@ app.use(express.json());
 
 //APP.USE ROUTES DECLARATION MIDDLEWARE
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/projects', projectRoutes)
 
 //4 SERVER
 module.exports = app;

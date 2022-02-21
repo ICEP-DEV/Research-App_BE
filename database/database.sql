@@ -135,7 +135,7 @@ INSERT INTO `project_status` (`status`) VALUES ('accepted');
 
 
 
-CREATE TABLE `project`
+CREATE TABLE `projects`
 (
     `projectId` INT(10) NOT NULL AUTO_INCREMENT,
     `startDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -145,6 +145,8 @@ CREATE TABLE `project`
     `name` VARCHAR(100),
     `text` LONGTEXT,
     `statusId` INT(2) NOT NULL DEFAULT 1, -- FK
+    `createdAt` DATETIME NOT NULL,
+    `updatedAt` DATETIME NOT NULL,
     `projectTypeId` INT(2) NOT NULL, -- FK
     `userId` INT(10) NOT NULL, -- FK
     `supervisorId` INT(10) NOT NULL,
@@ -163,7 +165,7 @@ CREATE TABLE `notes`
     `guidelineId` INT(10),
     `projectId` INT(10) NOT NULL,
     FOREIGN KEY (`guidelineId`) REFERENCES `guideline`(`guidelineId`),
-    FOREIGN KEY (`projectId`) REFERENCES project(`projectId`)
+    FOREIGN KEY (`projectId`) REFERENCES projects(`projectId`)
 
 );
 
