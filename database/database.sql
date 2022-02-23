@@ -147,9 +147,9 @@ CREATE TABLE `project`
     `statusId` INT(2) NOT NULL DEFAULT 1, -- FK
     `projectTypeId` INT(2) NOT NULL, -- FK
     `userId` INT(10) NOT NULL, -- FK
-    `supervisorId` INT(10) NOT NULL,
+    `supervisorId` INT(10),
     FOREIGN KEY (`supervisorId`) REFERENCES `user`(`userId`),
-    PRIMARY KEY (`projectId`, `name`),
+    PRIMARY KEY (`projectId`, `userId`),
     FOREIGN KEY (`userId`) REFERENCES `user`(`userId`),
     FOREIGN KEY (`statusId`) REFERENCES project_status(`statusId`),
     FOREIGN KEY (`projectTypeId`) REFERENCES project_type(`projectTypeId`)
