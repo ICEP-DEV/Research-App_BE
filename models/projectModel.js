@@ -55,26 +55,6 @@ const Project = sequelize.define('project',{
    // your other configuration here
 })
 
-Project.queryInterface.addConstraint
 
 
 module.exports = Project;
-// CREATE TABLE `project`
-// (
-//     `projectId` INT(10) NOT NULL AUTO_INCREMENT,
-//     `startDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//     `endDate` DATE,
-//     `description` VARCHAR(500), 
-//     `keyword` VARCHAR(100),
-//     `name` VARCHAR(100),
-//     `text` LONGTEXT,
-//     `statusId` INT(2) NOT NULL DEFAULT 1, -- FK
-//     `projectTypeId` INT(2) NOT NULL, -- FK
-//     `userId` INT(10) NOT NULL, -- FK
-//     `supervisorId` INT(10) NOT NULL,
-//     FOREIGN KEY (`supervisorId`) REFERENCES `user`(`userId`),
-//     PRIMARY KEY (`projectId`, `name`),
-//     FOREIGN KEY (`userId`) REFERENCES `user`(`userId`),
-//     FOREIGN KEY (`statusId`) REFERENCES project_status(`statusId`),
-//     FOREIGN KEY (`projectTypeId`) REFERENCES project_type(`projectTypeId`)
-// );
