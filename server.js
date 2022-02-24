@@ -5,7 +5,7 @@ dotenv.config({ path: './.env' }); //FOR GETTING PATH OF .env file
 const sequelize = require('./config/db')
 const Project = require("./models/projectModel")
 
-// sequelize.sync()
+sequelize.sync()
 // sequelize.sync({force:false})
 
 
