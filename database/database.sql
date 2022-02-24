@@ -153,7 +153,7 @@ CREATE TABLE `projects`
     `references` INT(10),
     FOREIGN KEY (`supervisorId`) REFERENCES `users`(`userId`),
     FOREIGN KEY (`references`) REFERENCES `projects`(`projectId`),
-    PRIMARY KEY (`projectId`, `userId`),
+    PRIMARY KEY (`name`, `userId`),
     FOREIGN KEY (`userId`) REFERENCES `users`(`userId`),
     FOREIGN KEY (`statusId`) REFERENCES project_status(`statusId`),
     FOREIGN KEY (`projectTypeId`) REFERENCES project_types(`projectTypeId`)
