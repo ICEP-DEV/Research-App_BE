@@ -145,8 +145,6 @@ CREATE TABLE `projects`
     `name` VARCHAR(100),
     `text` LONGTEXT,
     `statusId` INT(2) NOT NULL DEFAULT 1, -- FK
-    `createdAt` DATETIME NOT NULL,
-    `updatedAt` DATETIME NOT NULL,
     `projectTypeId` INT(2) NOT NULL, -- FK
     `userId` INT(10) NOT NULL, -- FK
     `supervisorId` INT(10),
