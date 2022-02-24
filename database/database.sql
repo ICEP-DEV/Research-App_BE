@@ -68,6 +68,8 @@ CREATE TABLE `users`
     
 );
 
+INSERT INTO `users` (`userId`, `firstName`, `lastName`, `email`, `password`, `idNumber`, `title`, `photo`, `userType`, `references`) VALUES (NULL, 'Shiko', 'Matlala', 'shikomatlala@gmail.com', 'shiko', '9511275418082', 'Mr', 'Get the API', '1', NULL);
+
 
 -- CREATE TABLE `user_usertype`
 -- (
@@ -158,6 +160,9 @@ CREATE TABLE `projects`
     FOREIGN KEY (`statusId`) REFERENCES project_status(`statusId`),
     FOREIGN KEY (`projectTypeId`) REFERENCES project_types(`projectTypeId`)
 );
+
+
+INSERT INTO `projects` (`projectId`, `startDate`, `endDate`, `description`, `keyword`, `name`, `text`, `statusId`, `projectTypeId`, `userId`, `supervisorId`, `createAt`, `updatedAt`, `references`) VALUES (NULL, current_timestamp(), NULL, 'Here we study the effects that water has on human beings, \r\nI have a theory that people who drink water can reduce the level of their mental health', 'Health, Nature, Well Being', 'Water makes you healtheir', NULL, '1', '1', '1', NULL, '2022-02-24 16:18:00.000000', '2022-02-24 16:18:00.000000', NULL);
 
 CREATE TABLE `notes`
 (
