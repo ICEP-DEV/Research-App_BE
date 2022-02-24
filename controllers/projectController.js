@@ -40,7 +40,7 @@ exports.getAllProjects = async(req,res,next)=> {
 exports.getProject = async(req, res, next) =>{
     
     const project = await Project.findOne({
-        where: {id : req.params.id}
+        where: {projectId : req.params.id}
     })
     res.status(200).json({
         status: "success",

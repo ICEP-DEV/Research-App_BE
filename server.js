@@ -6,7 +6,10 @@ const sequelize = require('./config/db')
 const Project = require("./models/projectModel")
 
 // sequelize.sync()
+// sequelize.sync({force:false})
 
+
+// Project.sync({ force: true });
 // // You can change the user.js file
 // // And run this code to check if it overwrites the existing code.
 // try {
