@@ -1,12 +1,30 @@
 const Project = require("../models/projectModel");
+const catchAsync  = require('../utils/catchAsync')
 
+exports.createProject = catchAsync(async(req,res,next)=> {
+//     try {
+//         const project =  await Project.create(req.body);
+//     } catch (err) {
+// let errors = {}
+// let message = '';
+//          if (err.errors) {
+//        errors = Object.values(err.errors).map((el) => el.message);
+//        message = `Invalid input data : ${errors.join(', ')}`;
+//          }
 
-exports.createProject = (req,res,next)=> {
+//     return res.status(200).json({
+//         status: "fail",
+//         message
+        
+//     })
+    // }
+    const project =  await Project.create(req.body);
+    
     res.status(200).json({
         status: "success",
-        message: "Hello from create Project route 😜"
+        project
     })
-}
+})
 
 exports.getAllProjects = async(req,res,next)=> {
 
