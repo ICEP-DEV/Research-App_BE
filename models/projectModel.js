@@ -6,11 +6,12 @@ const sequelize =  require("../config/db")
 const Project = sequelize.define('project',{
     projectId: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
+        unique: true,
         autoIncrement: true
     },
     name: {
-        type: Sequelize.UUID,
+        type: Sequelize.UUID,//string
+        primaryKey: true,
         allowNull: false,
         len:{ args: [6,20], msg: "String length is not in range 6-20"},
     },
@@ -43,6 +44,7 @@ const Project = sequelize.define('project',{
     },
     userId: {
         type: Sequelize.INTEGER,
+        primaryKey: true,
         allowNull: false
     },
     supervisorId: {

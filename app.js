@@ -9,7 +9,6 @@ const app = express();
 //2 REQUIRE ROUTES
 const userRoutes = require('./routes/userRoutes')
 const projectRoutes = require("./routes/projectRoutes");
-const e = require('express');
 
 
 //3 APP.USE MIDDLEWARE
@@ -23,7 +22,8 @@ app.use(express.json());
 
 //APP.USE ROUTES DECLARATION MIDDLEWARE
 app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/projects', projectRoutes)
+app.use('/api/v1/projects', projectRoutes);
+
 
 const modelErrHandle = err =>{
 
@@ -47,7 +47,8 @@ const modelErrHandle = err =>{
 
 // }
 app.use((err, req, res, next) => {
-
+// console.log(err)
+const e = err;
     if (err.errors) err =  modelErrHandle(err);
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
@@ -55,7 +56,8 @@ app.use((err, req, res, next) => {
 
     res.status(err.statusCode).json({
         status: err.status,
-        message: err.message
+        message: err.message,
+        e
     })
 
 })
