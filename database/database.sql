@@ -52,7 +52,7 @@ INSERT INTO `disciplines`  (`name`, `facultyId`)  VALUES ('Computer science', 2)
 
 CREATE TABLE `users`
 (
-    `userId` INT(10) NOT NULL AUTO_INCREMENT,
+    `id` INT(10) NOT NULL AUTO_INCREMENT,
     `firstName` VARCHAR(50) NOT NULL,
     `lastName` VARCHAR(50) NOT NULL,
     `email` VARCHAR(250) UNIQUE NOT NULL,
@@ -62,13 +62,13 @@ CREATE TABLE `users`
     `photo` VARCHAR(255) NOT NULL DEFAULT "Get the API",
     `userType`  VARCHAR(15) NOT NULL,
     `references` INT(10),
-    PRIMARY KEY(`userId`, `idNumber`),
+    PRIMARY KEY(`id`, `idNumber`),
     UNIQUE (`idNumber`, `userType`),
-    FOREIGN KEY (`references`) REFERENCES users(`userId`)
+    FOREIGN KEY (`references`) REFERENCES users(`id`)
     
 );
 
-INSERT INTO `users` (`userId`, `firstName`, `lastName`, `email`, `password`, `idNumber`, `title`, `photo`, `userType`, `references`) VALUES (NULL, 'Shiko', 'Matlala', 'shikomatlala@gmail.com', 'shiko', '9511275418082', 'Mr', 'Get the API', '1', NULL);
+INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `password`, `idNumber`, `title`, `photo`, `userType`, `references`) VALUES (NULL, 'Shiko', 'Matlala', 'shikomatlala@gmail.com', 'shiko', '9511275418082', 'Mr', 'Get the API', '1', NULL);
 
 
 -- CREATE TABLE `user_usertype`
@@ -153,10 +153,10 @@ CREATE TABLE `projects`
     `createAt` DATETIME NOT NULL,
     `updatedAt` DATETIME NOT NULL,
     `references` INT(10),
-    FOREIGN KEY (`supervisorId`) REFERENCES `users`(`userId`),
+    FOREIGN KEY (`supervisorId`) REFERENCES `users`(`id`),
     FOREIGN KEY (`references`) REFERENCES `projects`(`projectId`),
     PRIMARY KEY (`name`, `userId`),
-    FOREIGN KEY (`userId`) REFERENCES `users`(`userId`),
+    FOREIGN KEY (`userId`) REFERENCES `users`(`id`),
     FOREIGN KEY (`statusId`) REFERENCES project_status(`statusId`),
     FOREIGN KEY (`projectTypeId`) REFERENCES project_types(`projectTypeId`)
 );
