@@ -33,6 +33,7 @@ exports.getAllProjects = async(req,res,next)=> {
     res.status(200).json({
         status: "success",
         message: "Hello from get all Project route 😜",
+        results: projects.length,
         projects
     })
 }
@@ -40,8 +41,11 @@ exports.getAllProjects = async(req,res,next)=> {
 exports.getProject = async(req, res, next) =>{
     
     const project = await Project.findOne({
-        where: {id : req.params.id}
+        where: {projectId : req.params.id}
     })
+
+    if(!project) return next(new Error('Document does not exist'));
+
     res.status(200).json({
         status: "success",
         project
@@ -52,8 +56,11 @@ exports.updateProject = async(req, res, next) =>{
     const {body} = req;
     const project = await Project.update(body,
         {
-        where: {id : req.params.id}
+        where: {projectId : req.params.id}
     })
+
+    if(!project[0]) return next(new Error('Document does not exist'));
+
     res.status(200).json({
         status: "success",
         message: "Project updated",
@@ -64,10 +71,14 @@ exports.updateProject = async(req, res, next) =>{
 
 exports.deleteProject = async(req, res, next) =>{
 
+    // const projects=0;
     const project = await Project.destroy(
         {
-        where: {id : req.params.id}
+        where: {projectId : req.params.id}
     })
+
+    console.log(project)
+    if(!project) return next(new Error('Document does not exist'))
     res.status(200).json({
         status: "success",
         message: "Project deleted",
