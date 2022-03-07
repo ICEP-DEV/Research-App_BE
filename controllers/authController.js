@@ -98,7 +98,7 @@ exports.forgotPassword = catchAsync(async(req, res, next)=> {
 
 const mailOptions = {
     from : 'researcherdna952@gmail.com',
-    to: User.email,
+    to: user.email,
     subject : 'Password reset',
     text: "Please use the OTP below to reset your password",
     html: `<a href= "<p>Please use the link below to reset your password.<br>
