@@ -1,0 +1,20 @@
+{
+  "name": "notes",
+  "version": "1.0.0",
+  "description": "The following application is based on allowing a user to take or rather to keep notes as they are on the website - This allows them to take notes for the guidelines that they are working on, also it allows them to take notes for a general purpose without specifying the guideline that they are working on",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shiko",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "get-words": "^0.1.3",
+    "mysql": "^2.18.1",
+    "word-counting": "^1.1.4",
+    "words": "^0.1.4"
+  }
+}

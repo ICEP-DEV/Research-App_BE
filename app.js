@@ -11,7 +11,7 @@ const app = express();
 const userRoutes = require('./routes/userRoutes')
 const projectRoutes = require("./routes/projectRoutes");
 const guidelineRoutes = require('./routes/guidelineRoutes')
-
+const notesRoutes = require('./routes/notesRoutes')
 
 //3 APP.USE MIDDLEWARE
 
@@ -26,6 +26,8 @@ app.use(express.json());
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/projects', projectRoutes);
 app.use('/api/v1/guidelines', guidelineRoutes)
+app.use('/api/v1/notes', notesRoutes)
+
 
 
 app.use(globalErrHandler)
