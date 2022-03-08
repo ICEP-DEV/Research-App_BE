@@ -6,7 +6,7 @@ const sequelize = require('./config/db')
 const Project = require("./models/projectModel")
 
 sequelize.sync()
-// sequelize.sync({force:false})
+// sequelize.sync({alter:true})
 
 
 // Project.sync({ force: true });

@@ -1,5 +1,6 @@
 const Guideline = require("../models/guidelinesModel");
 const catchAsync  = require('../utils/catchAsync')
+const sequelize = require('../config/db')
 
 exports.createGuideline = catchAsync(async(req,res,next)=> {
 
@@ -13,7 +14,13 @@ exports.createGuideline = catchAsync(async(req,res,next)=> {
 
 exports.getAllGuidelines = async(req,res,next)=> {
 
-    const guidelines = await Guideline.findAll({});
+    // const guidelines = await Guideline.findAll({});
+const line = `SELECT * FROM disciplines, project_types, guidelines WHERE disciplines.desciplineId = project_types.desciplineId AND project_types.projectTypeId = 3 AND guidelines.projectTypeId = project_types.projectTypeId; `
+    const guidelines = await sequelize.query(line , {
+        nest: true,
+        type: sequelize.QueryTypes.SELECT
+      });
+
 
     res.status(200).json({
         status: "success",

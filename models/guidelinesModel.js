@@ -24,12 +24,20 @@ const Guidelines = sequelize.define('guideline',{
     g_order: {
         type: Sequelize.INTEGER,
         allowNull: false,
+    },
+    points:{
+        type: Sequelize.STRING,
+        allowNull: true
+
     }
 
 })
 
 
+// User.hasOne(Product);
+// Product.belongsTo(User);
 
+// sequelize.sync({alter:true})
 module.exports = Guidelines;
 
 
