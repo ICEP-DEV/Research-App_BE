@@ -20,16 +20,6 @@ const handleDublicateEntry = (err) => {
   // return new Error(err.parent.sqlMessage);
 };
 
-const unknownColumn = (err) => {
-  const message = err.parent.sqlMessage;
-  console.log('HELLLLLLLLLO',message)
-  const e = new Error(message);
-  e.statusCode = 400;
-  e.status = "fail";
-
-  return e;
-}
-
 const errResponseHandler = (e, res) => {
     const message = e.message
     res.status(e.statusCode).json({
@@ -40,11 +30,13 @@ const errResponseHandler = (e, res) => {
 }
 
 const errHandler = (err, req, res, next) => {
-  console.log('HELLLLLLOerr')
+  console.log(err)
   const e = err;
-  const code = typeof err.parent == "object" && err.parent && "errno" in err.parent ? err.parent.errno : 0;
+  const code =
+    typeof err.parent == "object" && err.parent && "errno" in err.parent
+      ? err.parent.errno
+      : 0;
   if ((code == 1062)) err = handleDublicateEntry(err);
-  if((code == 1054)) err = unknownColumn(err);
   if (err.errors) err = modelErrHandle(err);
 
   err.statusCode = err.statusCode || 500;

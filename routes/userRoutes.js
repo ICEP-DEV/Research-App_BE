@@ -10,6 +10,10 @@ const authController = require('../controllers/authController')
 //4 ROUTES
 
 router.route('/login').post(authController.login)
+router.route('/register').post(authController.signup)
+router.route('/forgotPassword').post(authController.forgotPassword)
+router.route('/updatePassword').post(authController.updatePassword)
+router.route('/confirmEmail/:token').get(authController.confirmEmail)
 
 
 module.exports = router
