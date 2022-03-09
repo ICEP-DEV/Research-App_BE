@@ -38,17 +38,6 @@ INSERT INTO `disciplines`  (`name`, `facultyId`)  VALUES ('Computer science', 2)
 
 
 
--- CREATE TABLE `userType`
--- (
---     `userTypeId` INT(2) PRIMARY KEY AUTO_INCREMENT,
---     `name` VARCHAR(50) NOT NULL
--- );
-
--- INSERT INTO `userType` (`name`) VALUES ('student');
--- INSERT INTO `userType` (`name`) VALUES ('supervisor');
--- INSERT INTO `userType` (`name`) VALUES ('admin');
-
-
 
 CREATE TABLE `users`
 (
@@ -69,20 +58,6 @@ CREATE TABLE `users`
 );
 
 INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `password`, `idNumber`, `title`, `photo`, `userType`, `references`) VALUES (NULL, 'Shiko', 'Matlala', 'shikomatlala@gmail.com', 'shiko', '9511275418082', 'Mr', 'Get the API', '1', NULL);
-
-
--- CREATE TABLE `user_usertype`
--- (
---     `userUserTypeId` INT(10) PRIMARY KEY AUTO_INCREMENT,
---     `userId` INT(10) NOT NULL,
---     `email` VARCHAR(250) UNIQUE NOT NULL,
---     `password` VARCHAR(16) NOT NULL,
---     `userTypeId` INT(2) NOT NULL DEFAULT 1,
---     FOREIGN KEY (`userTypeId`) REFERENCES userType(`userTypeId`),
---     FOREIGN KEY (`userId`) REFERENCES user(`userId`)
-
--- );
-
 
 
 
