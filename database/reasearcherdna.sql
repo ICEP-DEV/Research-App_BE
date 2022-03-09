@@ -244,7 +244,7 @@ CREATE TABLE `users` (
   `references` int(10) DEFAULT NULL,
   `departmentId` INT(10)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+-- Hi there
 --
 -- Dumping data for table `users`
 --
