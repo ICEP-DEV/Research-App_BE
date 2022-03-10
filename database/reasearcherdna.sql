@@ -472,6 +472,7 @@ ALTER TABLE `notes`
 ALTER TABLE `projects`
   ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`supervisorId`) REFERENCES `users` (`userId`),
   ADD CONSTRAINT `projects_ibfk_2` FOREIGN KEY (`references`) REFERENCES `projects` (`projectId`),
+  ADD CONSTRAINT `check_if_project_type_is_research` CHECK (`projectTypeId` <> 2),
   ADD CONSTRAINT `projects_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`),
   ADD CONSTRAINT `projects_ibfk_4` FOREIGN KEY (`statusId`) REFERENCES `project_status` (`statusId`),
   ADD CONSTRAINT `projects_ibfk_5` FOREIGN KEY (`projectTypeId`) REFERENCES `project_types` (`projectTypeId`);
