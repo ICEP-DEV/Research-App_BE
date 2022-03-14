@@ -5,128 +5,145 @@ const catchAsync = require('../utils/catchAsync')
 const jwt = require("jsonwebtoken")
 const messagebird = require('messagebird')
 const { getMaxListeners } = require('../app');
-
-
-  
+const { token } = require('morgan');
 
 
 
-// function authenticateToken(req,res,next){
-//     const authHeader = req.headers["authorization"];
-//     const token = authHeader && authHeader.split(' ')[1];
+const signToken = user => {
 
-//     if(token == null ) return res.sendStatus()
-// }
+    return jwt.sign({ id: user.id, userType: user.userType, email: user.email },
+        'Stack',
+        { expiresIn: "1d", });
 
-exports.login = catchAsync(async (req, res, next)=> {
+}
 
- 
+
+exports.confirmEmail = catchAsync(async (req, res, next) => {
+
+    try {
+
+        const userID = jwt.verify(req.params.token, 'Stack');
+        const user = await User.findOne({ where: { id: userID.id } })
+        await user.update({ verified: true }, { where: { id: userID } })
+
+    } catch (e) {
+        res.send('error')
+    }
+    res.status(200).json({
+        status: 'success',
+        message: 'Email confirmed!'
+    })
+
+})
+
+exports.login = catchAsync(async (req, res, next) => {
+
+    const user = await User.findOne({
+        where: { email: req.body.email }
+    });
+
+    if (!user) {
+        return next(new Error('User does not exist'));
+    } else {
+        if (!(bcrypt.compare(req.body.password, user.password))) {
+            return res.send("Incorrect password");
+        } else {
+
+            if (user.verified == false) {
+                return res.send('Use the link in your email to verify your account');
+
+            }
+        }
+
+    }
+
     
-    
+
     res.status(200).json({
         status: 'success',
         message: 'Welcome to login endpoint'
     })
 })
 
-exports.signup = catchAsync(async(req, res, next)=> {
+exports.signup = catchAsync(async (req, res, next) => {
 
 
     //code goes here....
-    
+
+    req.body.password = await bcrypt.hash(req.body.password, 8);
     const user = await User.create(req.body)
-    let hashedPassword = await bcrypt.hash(user.password, 8);
-    await user.update({password: hashedPassword});
 
-    const token = jwt.sign( {userType: user.userType,email:user.email},  
-                           'Stack',
-                         {expiresIn: "24h",} );  
-   
-
-     const transporter = nodemailer.createTransport({
-         service: 'Gmail',
-          auth: {
-                    user: 'researcherdna952@gmail.com',
-                    pass: '@icepdevs2022'
-                }
-      })
-
-
-   const mailOptions = {
-        from : 'researcherdna952@gmail.com',
-         to: user.email,
-        subject : 'Confrimation Email',
-        text: 'Please click on the link to verify your ResearcherDNA account:',
-        html: ` <p>Please click on the link to verify your ResearcherDNA account:</p><<br><a href= "http://localhost:3000/api/v1/users/login"${token}>${token}</a><br><p><b>NB!!: 
-             </b>This link will be inactive within the next 24 hours.Failure to verify your account will result into the deactivation thereof.`
     
-};
 
-transporter.sendMail(mailOptions, (err,info) =>{
-    if(err){
-        console.log(err);
-    }
-    else{
-        console.log('Email sent: '+ info.response);
-    }
-});
+    const token = signToken(user)
 
-     res.status(200).json({
-        status: 'success',
-        message: 'Awaiting email verification',
-        user
+
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'researcherdna952@gmail.com',
+            pass: '@icepdevs2022'
+        }
     })
-    
- 
-
- })
 
 
-exports.forgotPassword = catchAsync(async(req, res, next)=> {
+    const mailOptions = {
+        from: 'Admin',
+        to: user.email,
+        subject: 'Confrimation Email',
 
-    const forgotPassToken = jwt.sign( {userType: user.userType,email:user.email},  
-        'Stack',
-      {expiresIn: "24h",} );
+        html: ` <p>Please click on the link to verify your email to activate your ResearcherDNA account:<br></p><a href= http://localhost:3000/api/v1/users/confirmEmail/${token}>${token}<br><p><b>NB!!: 
+             </b>This link will be inactive within the next 24 hours.Failure to verify your email will result into the deactivation of your account. Furthermore, you will have to restart your registration process.</p>`
 
-  const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'researcherdna952@gmail.com',
-        pass: '@icepdevs2022'
-    }
-})
+    };
 
-const mailOptions = {
-    from : 'researcherdna952@gmail.com',
-    to: user.email,
-    subject : 'Password reset',
-    text: "Please use the OTP below to reset your password",
-    html: `<a href= "<p>Please use the link below to reset your password.<br>
-            <b>Link:</b>${ forgotPassToken }`
-    
-};
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 
-transporter.sendMail(mailOptions, (err,info) =>{
-    if(err){
-        console.log(err);
-    }
-    else{
-        console.log('Email sent: '+ info.response);
-    }
-});
+
+    const cookieOptions = res.cookie('jwt', token, {
+        expires: new Date( Date.now() + 1 * 24 * 60 * 1000),
+        httpOnly: true
+    });
+
+    cookieOptions.secure = true;
+
     res.status(200).json({
         status: 'success',
-        message: 'Welcome to Forgot Password endpoint'
+        message: 'Awaiting email verification',
+        user,
+        token
     })
+
+    if (user.verified == false && (!jwt.verify(req.params.token, 'Stack'))) {
+        user.destroy({ where: { email: user.email } })
+    }
 
 })
 
 
-exports.updatePassword = catchAsync(async(req, res, next)=> {
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+    
+        res.status(200).json({
+            status: 'success',
+            message: 'Welcome to Forgot Password endpoint'
+        })
+    
+
+    
+
+})
+
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         message: 'Welcome to Upadate Password endpoint'
     })
 })
-
-
