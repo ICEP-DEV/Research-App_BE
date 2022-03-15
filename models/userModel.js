@@ -5,7 +5,7 @@ const sequelize =  require("../config/db")
 const User = sequelize.define('user',{
     id:{
         type: Sequelize.INTEGER,
-        unique: true,
+        primaryKey: true,
         autoIncrement: true,
     },
 
@@ -32,9 +32,11 @@ const User = sequelize.define('user',{
        allowNull: false,
        validate: {
         validatePassword: function(password) {
+
                       if(!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/.test(password))) {
                           throw new Error('The password must contain at least 8 and maximum 16 characters including at least 1 uppercase, 1 lowercase, one number and one special character.');
                       }
+
                   }
               },
     },
