@@ -56,6 +56,10 @@ const User = sequelize.define('user',{
  
      },
 
+    //  photo:{
+    //      type: Sequelize.BLOB
+    //  },
+
      userType:{
         type: Sequelize.STRING,
         defaultValue: 1,

@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken")
 const messagebird = require('messagebird')
 const { getMaxListeners } = require('../app');
 const { token } = require('morgan');
+const { getUsers } = require('./userController');
 
 
 
@@ -29,31 +30,34 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
         await user.update({ verified: true }, { where: { id: userID } })
 
     } catch (e) {
-        res.send('error')
+        res.send('Error!Link has expired.')
     }
     res.status(200).json({
         status: 'success',
         message: 'Email confirmed!'
     })
 
+    
+
 })
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-    const user = User.findOne({ where: { email: req.params.email } });
-    const { password, confirmPassword } = req.body;
-    if (err) {
-        return next(new Error('Oops!Something went wrong. Please try again'))
-    }
-    else
+    // const user = User.findOne({ where: { email: req.params.email } });
+    // const { password, confirmPassword } = req.body;
+    // if (err) {
+    //     return next(new Error('Oops!Something went wrong. Please try again'))
+    // }
+    // else
 
-        if (!password || !confirmPassword) {
-            res.send('Fields cannot be empty!')
-        } else if (password !== confirmPassword) {
-            res.send('Passwords do not match')
-        } else {
-            user.update({ password: password }, { where: { email: req.params.email } })
+    //     if (!password || !confirmPassword) {
+    //         res.send('Fields cannot be empty!')
+    //     } else if (password !== confirmPassword) {
+    //         res.send('Passwords do not match')
+    //     } else {
+    //         user.update({ password: password }, { where: { email: req.params.email } })
 
-        }
+    //     }
+    
 
     res.status(200).json({
         status: 'success',
@@ -82,12 +86,16 @@ exports.login = catchAsync(async (req, res, next) => {
         }
 
     }
-    const cookieOptions = res.cookie('jwt', token, {
-        expires: new Date( Date.now() + 1 * 24 * 60 * 1000),
-        httpOnly: true
-    });
 
-     cookieOptions.secure = true;
+
+
+        const cookieOptions = res.cookie('jwt', token, {
+            expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
+            httpOnly: true
+        });
+
+        cookieOptions.secure = true;
+      
 
     
 
@@ -98,6 +106,47 @@ exports.login = catchAsync(async (req, res, next) => {
          
     })
 })
+
+const data = {id:1, name: 'katleho', email:'hello@k.com'};
+exports.meUser = (req, res, next)=>{
+
+
+    //Your code goes here.......
+
+    // const jwt = require('jsonwebtoken');
+
+    // module.exports = (req, res, next) => {
+    //     try {
+    //         const token = req.headers.authorization.split(' ')[1];
+    //         const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    //         const userId = decodedToken.userId;
+    //         if (req.body.userId && req.body.userId !== userId) {
+    //             throw 'Invalid user ID';
+    //         } else {
+    //             next();
+    //         }
+    //     } catch {
+    //         res.status(401).json({
+    //             error: new Error('Invalid request!')
+    //         });
+    //     }
+    // };
+
+    const user= data;
+
+    req.user = user
+
+
+    next();
+}
+
+exports.testUser = (req, res, next) =>{
+
+    res.status(200).json({
+        status:"success",
+        user:req.user
+    })
+}
 
 exports.signup = catchAsync(async (req, res, next) => {
 
@@ -154,6 +203,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     }
 
 })
+
 
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
@@ -213,25 +263,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 })
 
 
-exports.updatePassword = catchAsync(async (req, res, next) => {
-    
-    const { password, confirmPassword } = req.body;
-    const user = await User.findOne({ where: { email: req.body.email } });
 
-    if (!password || !confirmPassword) {
-        res.send('Fields cannot be empty!')
-    } else if (password !== confirmPassword) {
-        res.send('Passwords do not match')
-    } else {
-       await user.update({ password: password }, { where: { email: req.params.email } })
-
-    }
-
-    res.status(200).json({
-        status: 'success',
-        message: 'Password successfully updated.'
-    })
-})
 
 
 
