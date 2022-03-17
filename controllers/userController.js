@@ -22,27 +22,28 @@ exports.getUsers = catchAsync( async(req, res, next) =>{
 })
 
 exports.updateProfile = catchAsync(async (req, res, next) => {
-
+    
     const { password, confirmPassword, firstName, lastName } = req.body;
-    const user = await User.findOne({ where: { email: req.body.email } });
+    console.log(req.user.id)
+//    // const user = await User.findOne({ where: { id: req.user.id } });
+//    console.log(req.body.password)
+//     if (password) {
 
-    if (password || confirmPassword) {
+//         if (password !== confirmPassword) {
+//             res.send('Passwords do not match')
+//         } else {
+//             await User.update({ password: password }, { where: { id: req.user.id } })
 
-        if (password !== confirmPassword) {
-            res.send('Passwords do not match')
-        } else {
-            await user.update({ password: password }, { where: { email: req.params.email } })
+//         }
+//     }
 
-        }
-    }
+//     if (firstName) {
+//         await User.update({ firstName: firstName }, { where: { id: req.user.id } })
+//     }
 
-    if (firstName) {
-        await user.update({ firstName: firstName }, { where: { email: req.params.email } })
-    }
-
-    if (lastName) {
-        await user.update({ lastName: lastName }, { where: { email: req.params.email } })
-    }
+//     if (lastName) {
+//         await User.update({ lastName: lastName }, { where: { id: req.user.id } })
+//     }
 
     res.status(200).json({
         status: 'success',

@@ -6,17 +6,18 @@ const authController = require('../controllers/authController')
 const userController = require('../controllers/userController')
 
 //3 MIDDLEWARE (if any)
-
+// const checkUser = require('../controllers/authController').checkUser;
 
 //4 ROUTES
 
 router.route('/login').post(authController.login)
 router.route('/register').post(authController.signup)
 router.route('/forgotPassword').post(authController.forgotPassword)
-router.route('/updateProfile').post(userController.updateProfile)
+router.route('/updateProfile').post(authController.checkUser,userController.updateProfile)
 router.route('/confirmEmail/:token').get(authController.confirmEmail)
 router.route('/resetPassword/:email').get(authController.resetPassword)
-router.route('/getUsers').get(authController.meUser, authController.testUser)
+//router.route('/getUsers').get(authController.checkUser, authController.testUser)
+
 
 
 

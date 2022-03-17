@@ -67,10 +67,10 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
 
-    const user = await User.findOne({
+    {const user = await User.findOne({
         where: { email: req.body.email }
     });
-    const token = signToken(user);
+    
 
     if (!user) {
         return next(new Error('User does not exist'));
@@ -87,7 +87,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
     }
 
-
+    const token = signToken(user);
 
         const cookieOptions = res.cookie('jwt', token, {
             expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
@@ -104,49 +104,43 @@ exports.login = catchAsync(async (req, res, next) => {
         message: 'Successfully logged in',
         token
          
-    })
+    })}
 })
 
-const data = {id:1, name: 'katleho', email:'hello@k.com'};
-exports.meUser = (req, res, next)=>{
+
+exports.checkUser = (req, res, next) => {
 
 
     //Your code goes here.......
 
-    // const jwt = require('jsonwebtoken');
-
-    // module.exports = (req, res, next) => {
-    //     try {
-    //         const token = req.headers.authorization.split(' ')[1];
-    //         const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    //         const userId = decodedToken.userId;
-    //         if (req.body.userId && req.body.userId !== userId) {
-    //             throw 'Invalid user ID';
-    //         } else {
-    //             next();
-    //         }
-    //     } catch {
-    //         res.status(401).json({
-    //             error: new Error('Invalid request!')
-    //         });
-    //     }
-    // };
-
-    const user= data;
-
-    req.user = user
 
 
-    next();
+
+    const token = req.headers.authorization.split(' ')[1]
+    if (!token) return next(new Error("Ooops Please log in"));
+
+    if (!(jwt.verify(token, 'Stack'))) {
+
+        return next(new Error('Oops something went wrong! Please try logging in again'));
+    }
+    else {
+
+        const decodedToken = jwt.verify(token, 'Stack');
+
+
+
+
+        const user = decodedToken;
+
+        req.user = user
+
+        next();
+    }
+
+
 }
 
-exports.testUser = (req, res, next) =>{
-
-    res.status(200).json({
-        status:"success",
-        user:req.user
-    })
-}
+// 
 
 exports.signup = catchAsync(async (req, res, next) => {
 
