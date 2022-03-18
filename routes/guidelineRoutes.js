@@ -1,4 +1,4 @@
-const guidelineController = require("../controllers/guidelinesControler");
+const guidelineController = require("../controllers/guidelinesController");
 const router = require("express").Router();
 
 router

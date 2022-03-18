@@ -20,6 +20,17 @@ const handleDublicateEntry = (err) => {
   // return new Error(err.parent.sqlMessage);
 };
 
+const handleUnknownID = (err) => {
+  const message = 'ID does not exist';
+  // console.log(message)
+  const e = new Error(message);
+  e.statusCode = 400;
+  e.status = "fail";
+
+  return e;
+  // return new Error(err.parent.sqlMessage);
+};
+
 const errResponseHandler = (e, res) => {
     const message = e.message
     res.status(e.statusCode).json({
@@ -37,6 +48,7 @@ const errHandler = (err, req, res, next) => {
       ? err.parent.errno
       : 0;
   if ((code == 1062)) err = handleDublicateEntry(err);
+  if(code == 1452) err = handleUnknownID(err);
   if (err.errors) err = modelErrHandle(err);
 
   err.statusCode = err.statusCode || 500;

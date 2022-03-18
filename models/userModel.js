@@ -3,9 +3,9 @@ const sequelize =  require("../config/db")
 
 
 const User = sequelize.define('user',{
-    id:{
+    id:{ //changed from id to userId
         type: Sequelize.INTEGER,
-        unique: true,
+        primaryKey: true,
         autoIncrement: true,
     },
 

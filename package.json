@@ -30,6 +30,8 @@
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "password-validator": "^5.2.1",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
     "sequelize": "^6.16.2",
     "sequelize-cli": "^6.4.1"
   }

@@ -1,16 +1,13 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../config/db')
+const sequelize = require('../config/db');
+const ProjectType = require('./projectTypeModel');
 
 
 const Guidelines = sequelize.define('guideline',{
-    guidelineId: {
+    id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
-    },
-    projectTypeId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
     },
     text: {
         type: Sequelize.STRING,
@@ -25,17 +22,22 @@ const Guidelines = sequelize.define('guideline',{
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    points:{
-        type: Sequelize.STRING,
-        allowNull: true
+    // points:{
+    //     type: Sequelize.STRING,
+    //     allowNull: true
 
-    }
+    // },
+
+    createdAt: {type:Sequelize.DATE, defaultValue: Sequelize.NOW},
+    updatedAt: Sequelize.DATE,
 
 })
 
 
 // User.hasOne(Product);
 // Product.belongsTo(User);
+ProjectType.hasOne(Guidelines, {onDelete:"RESTRICT",foreignKey:'projectTypeId'});
+Guidelines.belongsTo(ProjectType);
 
 // sequelize.sync({alter:true})
 module.exports = Guidelines;

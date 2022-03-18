@@ -1,16 +1,18 @@
 const { DATE } = require('sequelize')
 const Sequelize = require('sequelize')
 const sequelize =  require("../config/db") 
+const User = require('./userModel')
+const ProjectStatus = require('./projectStatusModel')
+const ProjectType = require('./projectTypeModel')
 
 
 const Project = sequelize.define('project',{
-    projectId: {
+    id: {
         type: Sequelize.INTEGER,
-        unique: true,
         autoIncrement: true
     },
     name: {
-        type: Sequelize.UUID,//string
+        type: Sequelize.STRING,//string
         primaryKey: true,
         allowNull: false,
         len:{ args: [6,20], msg: "String length is not in range 6-20"},
@@ -19,9 +21,6 @@ const Project = sequelize.define('project',{
         type: Sequelize.STRING,
         allowNull: false,
         len:{ args: [6,2000], msg: "String length is not in range 6-20"},
-    },
-    statusId: {
-        type: Sequelize.INTEGER
     },
     text: {
         type: Sequelize.STRING
@@ -35,12 +34,9 @@ const Project = sequelize.define('project',{
     keyword: {
         type: Sequelize.STRING
     },
+    // projectStatusId: Sequelize.INTEGER,
     endDate: {
         type: Sequelize.DATE
-    },
-    projectTypeId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
     },
     userId: {
         type: Sequelize.INTEGER,
@@ -48,7 +44,12 @@ const Project = sequelize.define('project',{
         allowNull: false
     },
     supervisorId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        validate: {
+            checkSupervisor(){
+                if(this.userId == this.supervisorId) throw new Error(`Option prohibited: User can't supervise own work`)
+            }
+        }
     },
     references: {
         type: Sequelize.INTEGER
@@ -56,11 +57,20 @@ const Project = sequelize.define('project',{
 
 
     
- // Column: Timestamps
+ // Column: Timestamp
  createdAt: Sequelize.DATE,
  updatedAt: Sequelize.DATE,
-})
+}, {indexes: [{unique: true, name: 'projectId', fields: ['id']}]})
 
+//FOREIGN KEY DECLARATIONS
+User.hasOne(Project, {onDelete: 'RESTRICT',foreignKey: 'userId'});
+Project.belongsTo(User);
+
+ProjectStatus.hasOne(Project, {onDelete: 'RESTRICT',foreignKey: 'projectStatusId'});
+Project.belongsTo(ProjectStatus);
+
+ProjectType.hasOne(Project, {onDelete: 'RESTRICT',foreignKey: 'projectTypeId'});
+Project.belongsTo(ProjectType);
 
 
 module.exports = Project;

@@ -1,87 +1,101 @@
 const Project = require("../models/projectModel");
-const catchAsync  = require('../utils/catchAsync')
+const catchAsync = require("../utils/catchAsync");
+const User = require("../models/userModel");
+const ProjectStatus = require("../models/projectStatusModel");
+const ProjectType = require("../models/projectTypeModel");
 
-exports.createProject = catchAsync(async(req,res,next)=> {
-//     try {
-//         const project =  await Project.create(req.body);
-//     } catch (err) {
-// let errors = {}
-// let message = '';
-//          if (err.errors) {
-//        errors = Object.values(err.errors).map((el) => el.message);
-//        message = `Invalid input data : ${errors.join(', ')}`;
-//          }
+exports.createProject = catchAsync(async (req, res, next) => {
+  //     try {
+  //         const project =  await Project.create(req.body);
+  //     } catch (err) {
+  // let errors = {}
+  // let message = '';
+  //          if (err.errors) {
+  //        errors = Object.values(err.errors).map((el) => el.message);
+  //        message = `Invalid input data : ${errors.join(', ')}`;
+  //          }
 
-//     return res.status(200).json({
-//         status: "fail",
-//         message
-        
-//     })
-    // }
-    const project =  await Project.create(req.body);
-    
-    res.status(200).json({
-        status: "success",
-        project
-    })
-})
+  //     return res.status(200).json({
+  //         status: "fail",
+  //         message
 
-exports.getAllProjects = async(req,res,next)=> {
+  //     })
+  // }
 
-    const projects = await Project.findAll({});
+  const project = await Project.create(req.body);
 
-    res.status(200).json({
-        status: "success",
-        message: "Hello from get all Project route 😜",
-        results: projects.length,
-        projects
-    })
-}
+  res.status(200).json({
+    status: "success",
+    project,
+  });
+});
 
-exports.getProject = async(req, res, next) =>{
-    
-    const project = await Project.findOne({
-        where: {projectId : req.params.id}
-    })
+exports.getAllProjects = async (req, res, next) => {
+  const projects = await Project.findAll({
+    include: [
+      {
+        model: User,
+        attributes: { exclude: ["updatedAt", "createdAt", "password"] },
+      },
+      {
+        model: ProjectStatus,
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      },
+      {
+        model: ProjectType,
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      },
+    ],
+  });
 
-    if(!project) return next(new Error('Document does not exist'));
+  res.status(200).json({
+    status: "success",
+    message: "Hello from get all Project route 😜",
+    results: projects.length,
+    projects,
+  });
+};
 
-    res.status(200).json({
-        status: "success",
-        project
-    })
-}
+exports.getProject = async (req, res, next) => {
+  const project = await Project.findOne({
+    where: { id: req.params.id },
+  });
 
-exports.updateProject = async(req, res, next) =>{
-    const {body} = req;
-    const project = await Project.update(body,
-        {
-        where: {projectId : req.params.id}
-    })
+  if (!project) return next(new Error("Document does not exist"));
 
-    if(!project[0]) return next(new Error('Document does not exist'));
+  res.status(200).json({
+    status: "success",
+    project,
+  });
+};
 
-    res.status(200).json({
-        status: "success",
-        message: "Project updated",
-        project
-    })
-}
+exports.updateProject = async (req, res, next) => {
+  const { body } = req;
 
+  const project = await Project.update(body, {
+    where: { id: req.params.id },
+  });
 
-exports.deleteProject = async(req, res, next) =>{
+  if (!project[0]) return next(new Error("Document does not exist"));
 
-    // const projects=0;
-    const project = await Project.destroy(
-        {
-        where: {projectId : req.params.id}
-    })
+  res.status(200).json({
+    status: "success",
+    message: "Project updated",
+    project,
+  });
+};
 
-    console.log(project)
-    if(!project) return next(new Error('Document does not exist'))
-    res.status(200).json({
-        status: "success",
-        message: "Project deleted",
-        project
-    })
-}
+exports.deleteProject = async (req, res, next) => {
+  // const projects=0;
+  const project = await Project.destroy({
+    where: { id: req.params.id },
+  });
+
+  console.log(project);
+  if (!project) return next(new Error("Document does not exist"));
+  res.status(200).json({
+    status: "success",
+    message: "Project deleted",
+    project,
+  });
+};
