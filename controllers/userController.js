@@ -10,7 +10,8 @@ const cloudinary = require('../config/cloudinary')
 
 
 
-exports.getUsers = catchAsync( async(req, res, next) =>{
+exports.getAllUsers = catchAsync( async(req, res, next) =>{
+    
     const users = await User.findAll({});
    if(!users){
        return next(new Error('Users not found!'))
@@ -21,29 +22,35 @@ exports.getUsers = catchAsync( async(req, res, next) =>{
     return res.send(users);
 })
 
+exports.getUser = catchAsync( async(req, res, next) =>{
+
+    let options ={ id : req.user.id}
+
+    // console.log(req.user)
+
+    if(req.user.userType == 2 || req.user.userType == 3 && req.body.email) options = {email : req.body.email}
+
+
+    const user = await User.findOne({
+        where: options
+    })
+
+    if(!user) return next(new Error('Document not found'))
+
+    res.status(200).json({
+        status: "success",
+        user
+    })
+
+
+
+})
+
 exports.updateProfile = catchAsync(async (req, res, next) => {
     
-    const { password, confirmPassword, firstName, lastName } = req.body;
+//    const { password, confirmPassword, firstName, lastName } = req.body;
     console.log(req.user.id)
-//    // const user = await User.findOne({ where: { id: req.user.id } });
-//    console.log(req.body.password)
-//     if (password) {
-
-//         if (password !== confirmPassword) {
-//             res.send('Passwords do not match')
-//         } else {
-//             await User.update({ password: password }, { where: { id: req.user.id } })
-
-//         }
-//     }
-
-//     if (firstName) {
-//         await User.update({ firstName: firstName }, { where: { id: req.user.id } })
-//     }
-
-//     if (lastName) {
-//         await User.update({ lastName: lastName }, { where: { id: req.user.id } })
-//     }
+   const user = await User.update(req.body,{ where: { id: req.user.id } });
 
     res.status(200).json({
         status: 'success',

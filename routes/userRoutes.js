@@ -16,7 +16,8 @@ router.route('/forgotPassword').post(authController.forgotPassword)
 router.route('/updateProfile').post(authController.checkUser,userController.updateProfile)
 router.route('/confirmEmail/:token').get(authController.confirmEmail)
 router.route('/resetPassword/:email').get(authController.resetPassword)
-//router.route('/getUsers').get(authController.checkUser, authController.testUser)
+router.route('/getAllUsers').get(authController.checkUser,authController.restrict(1), userController.getAllUsers)
+router.route('/getUser').get(authController.checkUser, userController.getUser)
 
 
 

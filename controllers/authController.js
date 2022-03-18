@@ -37,7 +37,7 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
         message: 'Email confirmed!'
     })
 
-    
+
 
 })
 
@@ -57,7 +57,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     //         user.update({ password: password }, { where: { email: req.params.email } })
 
     //     }
-    
+
 
     res.status(200).json({
         status: 'success',
@@ -67,27 +67,28 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
 
-    {const user = await User.findOne({
-        where: { email: req.body.email }
-    });
-    
+    {
+        const user = await User.findOne({
+            where: { email: req.body.email }
+        });
 
-    if (!user) {
-        return next(new Error('User does not exist'));
-    } else {
-        if (!(bcrypt.compare(req.body.password, user.password))) {
-            return res.send("Incorrect password");
+
+        if (!user) {
+            return next(new Error('User does not exist'));
         } else {
+            if (!(bcrypt.compare(req.body.password, user.password))) {
+                return res.send("Incorrect password");
+            } else {
 
-            if (user.verified == false) {
-                return res.send('Use the link in your email to verify your account');
+                if (user.verified == false) {
+                    return res.send('Use the link in your email to verify your account');
 
+                }
             }
+
         }
 
-    }
-
-    const token = signToken(user);
+        const token = signToken(user);
 
         const cookieOptions = res.cookie('jwt', token, {
             expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
@@ -95,17 +96,32 @@ exports.login = catchAsync(async (req, res, next) => {
         });
 
         cookieOptions.secure = true;
-      
 
-    
 
-    res.status(200).json({
-        status: 'success',
-        message: 'Successfully logged in',
-        token
-         
-    })}
+
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Successfully logged in',
+            token
+
+        })
+    }
 })
+
+
+exports.restrict = (val) => (req,res, next) =>{
+
+    if(req.user.userType == val) {
+        const err = new Error('Access Denied!')
+        err.status = 'fail'
+        err.statusCode = 401
+        return next(err);
+    }
+
+    next();
+
+}
 
 
 exports.checkUser = (req, res, next) => {
@@ -116,16 +132,13 @@ exports.checkUser = (req, res, next) => {
 
 
 
-    const token = req.headers.authorization.split(' ')[1]
+    const token = req.headers.authorization;
+
     if (!token) return next(new Error("Ooops Please log in"));
 
-    if (!(jwt.verify(token, 'Stack'))) {
+    decodedToken = jwt.verify(token.split(' ')[1], 'Stack')
 
-        return next(new Error('Oops something went wrong! Please try logging in again'));
-    }
-    else {
-
-        const decodedToken = jwt.verify(token, 'Stack');
+   
 
 
 
@@ -135,7 +148,6 @@ exports.checkUser = (req, res, next) => {
         req.user = user
 
         next();
-    }
 
 
 }
@@ -150,7 +162,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     req.body.password = await bcrypt.hash(req.body.password, 8);
     const user = await User.create(req.body)
 
-    
+
 
     const token = signToken(user)
 
@@ -184,7 +196,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     });
 
 
-    
+
     res.status(200).json({
         status: 'success',
         message: 'Awaiting email verification',
@@ -193,7 +205,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     })
 
     if (user.verified == false && (!jwt.verify(req.params.token, 'Stack'))) {
-       await user.destroy({ where: { email: user.email } })
+        await user.destroy({ where: { email: user.email } })
     }
 
 })
@@ -201,14 +213,14 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
-    
- const user = await User.findOne({where:  { email: req.body.email }});
- const token = signToken(user)
 
-    if(!user){
+    const user = await User.findOne({ where: { email: req.body.email } });
+    const token = signToken(user)
+
+    if (!user) {
         return res.send('User does not exist')
     }
-    else{
+    else {
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
@@ -216,18 +228,18 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
                 pass: '@icepdevs2022'
             }
         })
-    
-    
+
+
         const mailOptions = {
             from: 'Admin',
             to: user.email,
             subject: 'Password reset',
-    
+
             html: ` <p>Please click on the link to reset your ResearcherDNA passsword:<br></p><a href= http://localhost:3000/api/v1/users/resetPassword/${token}>${token}<br><p><b>NB!!: 
                  </b>This link will be inactive within the next 24 hours.</p>`
-    
+
         };
-    
+
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err);
@@ -236,23 +248,23 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
                 console.log('Email sent: ' + info.response);
             }
         });
-    
-    
-       
-    
+
+
+
+
         res.status(200).json({
             status: 'success',
             message: 'Reset',
             user,
             token
         })
-        
+
     }
-        
 
-        
 
-    
+
+
+
 
 })
 
