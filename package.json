@@ -21,6 +21,7 @@
   "homepage": "https://github.com/ICEP-DEV/Research-App_BE#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.28.1",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",

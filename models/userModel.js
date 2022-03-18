@@ -33,10 +33,10 @@ const User = sequelize.define('user',{
        validate: {
         validatePassword: function(password) {
 
-            console.log('TESTING PASSWORD',(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/.test(this.password)))
-                    //   if((/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/.test(this.password))) {
-                    //       throw new Error('The password must contain at least 8 and maximum 16 characters including at least 1 uppercase, 1 lowercase, one number and one special character.');
-                    //   }
+                      if(!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/.test(password))) {
+                          throw new Error('The password must contain at least 8 and maximum 16 characters including at least 1 uppercase, 1 lowercase, one number and one special character.');
+                      }
+
                   }
               },
     },
@@ -55,6 +55,10 @@ const User = sequelize.define('user',{
         
  
      },
+
+    //  photo:{
+    //      type: Sequelize.BLOB
+    //  },
 
      userType:{
         type: Sequelize.STRING,
