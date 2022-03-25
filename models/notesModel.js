@@ -48,12 +48,12 @@ Note.belongsTo(User)
 
 // Note.sync({alter: true})
 
-const hello = async()=>{
-    const logIt = await Note.findAll({});
+// const hello = async()=>{
+//     const logIt = await Note.findAll({});
 
-    console.log(logIt)
-}
+//     console.log(logIt)
+// }
 
-hello()
+// hello()
 
 module.exports = Note;
