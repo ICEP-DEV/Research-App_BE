@@ -2,7 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const globalErrHandler = require('./utils/errHandler')
-
+const cors = require('cors');
 
 
 const app = express();
@@ -25,6 +25,8 @@ const notesRoutes = require('./routes/notesRoutes');
 //3 APP.USE MIDDLEWARE
 
 app.use(express.json());
+app.use(cors());
+app.options('*', cors());
 
 //Testing application
 // app.get('/',(req,res)=>{
