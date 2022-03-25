@@ -18,7 +18,7 @@ const projectStatusRoutes = require('./routes/projectStatusRoutes');
 const linkController = require('./routes/linkController');
 const commentRoutes = require('./routes/commentRoutes');
 const blogRoutes = require('./routes/blogRoutes');
-
+const notesRoutes = require('./routes/notesRoutes');
 
 
 
@@ -42,6 +42,7 @@ app.use('/api/v1/project_statuses', projectStatusRoutes);
 app.use('/api/v1/links', linkController);
 app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/blogs', blogRoutes);
+app.use('/api/v1/notes', notesRoutes);
 
 app.use(globalErrHandler)
 //4 SERVER

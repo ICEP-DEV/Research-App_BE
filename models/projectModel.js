@@ -9,6 +9,7 @@ const ProjectType = require('./projectTypeModel')
 const Project = sequelize.define('project',{
     id: {
         type: Sequelize.INTEGER,
+        primaryKey: true,
         autoIncrement: true
     },
     name: {
