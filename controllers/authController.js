@@ -7,6 +7,8 @@ const messagebird = require('messagebird')
 const { getMaxListeners } = require('../app');
 const { token } = require('morgan');
 const { getUsers } = require('./userController');
+const dotenv = require('dotenv')
+dotenv.config({path: './.env'});
 
 
 
@@ -67,24 +69,27 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
 
-    {
+    {  
         const user = await User.findOne({
             where: { email: req.body.email }
         });
-
+        
+        console.log( !await bcrypt.compare(req.body.password, user.password))
 
         if (!user) {
             return next(new Error('User does not exist'));
         } else {
-            if (!(bcrypt.compare(req.body.password, user.password))) {
-                return res.send("Incorrect password");
-            } else {
+            
+            
+            // if (!await(bcrypt.compare(req.body.password, user.password))) {
+            //     return res.send("Incorrect password");
+            // } else {
 
-                if (user.verified == false) {
-                    return res.send('Use the link in your email to verify your account');
+            //     if (user.verified == false) {
+            //         return res.send('Use the link in your email to verify your account');
 
-                }
-            }
+            //     }
+            // }
 
         }
 
@@ -158,8 +163,8 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 
     //code goes here....
-
-    req.body.password = await bcrypt.hash(req.body.password, 8);
+   // const salt = bcrypt.genSalt(8);
+    req.body.password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(8));
     const user = await User.create(req.body)
 
 
@@ -170,8 +175,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     const transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-            user: 'researcherdna952@gmail.com',
-            pass: '@icepdevs2022'
+            user: process.env.ADMIN_GMAIL_ADDRESS,
+            pass: process.env.ADMIN_GMAIL_PASS
         }
     })
 
@@ -224,8 +229,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'researcherdna952@gmail.com',
-                pass: '@icepdevs2022'
+                user: process.env.ADMIN_GMAIL_ADDRESS,
+                pass: ADMIN_GMAIL_PASS
             }
         })
 
