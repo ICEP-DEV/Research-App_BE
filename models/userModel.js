@@ -29,6 +29,7 @@ const User = sequelize.define('user',{
 
     password:{
        type: Sequelize.STRING,
+
        allowNull: false,
     //    validate: {
     //     validatePassword: function(password) {
@@ -39,6 +40,9 @@ const User = sequelize.define('user',{
 
     //               }
     //           },
+
+       allowNull: false
+
     },
 
     idNumber:{
@@ -56,9 +60,10 @@ const User = sequelize.define('user',{
  
      },
 
-    //  photo:{
-    //      type: Sequelize.BLOB
-    //  },
+     photo:{
+         type: Sequelize.STRING,
+         defaultValue: "default.png",
+     },
 
      userType:{
         type: Sequelize.STRING,
