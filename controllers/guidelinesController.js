@@ -4,6 +4,12 @@ const sequelize = require('../config/db');
 const ProjectType = require("../models/projectTypeModel");
 const Discipline = require("../models/disciplineModel");
 
+
+exports.setIDs = (req,res,next)=>{
+    req.body.projectTypeId = req.query.projectTypeId
+
+    next();
+}
 exports.createGuideline = catchAsync(async(req,res,next)=> {
 
     const guideline =  await Guideline.create(req.body);
@@ -13,6 +19,8 @@ exports.createGuideline = catchAsync(async(req,res,next)=> {
         guideline
     })
 })
+
+
 
 exports.getAllGuidelines = async(req,res,next)=> {
 
