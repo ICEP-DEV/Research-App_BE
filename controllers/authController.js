@@ -44,7 +44,8 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
 })
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-    // const user = User.findOne({ where: { email: req.params.email } });
+    const user = User.findOne({ where: { email: req.params.email } });
+    
     // const { password, confirmPassword } = req.body;
     // if (err) {
     //     return next(new Error('Oops!Something went wrong. Please try again'))
@@ -63,7 +64,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        message: 'Password Successfully changed'
+        message: 'Password Successfully changed',
+        user: req.params.email
+        
     })
 })
 
@@ -186,7 +189,7 @@ exports.signup = catchAsync(async (req, res, next) => {
         to: user.email,
         subject: 'Confrimation Email',
 
-        html: ` <p>Please click on the link to verify your email to activate your ResearcherDNA account:<br></p><a href= http://localhost:3000/api/v1/users/confirmEmail/${token}>${token}<br><p><b>NB!!: 
+        html: ` <p>Please click on the link to verify your email to activate your ResearcherDNA account:</p><br><a href= http://localhost:3000/api/v1/users/confirmEmail/${token}>${token}</a><br><p><b>NB!!: 
              </b>This link will be inactive within the next 24 hours.Failure to verify your email will result into the deactivation of your account. Furthermore, you will have to restart your registration process.</p>`
 
     };
@@ -220,17 +223,19 @@ exports.signup = catchAsync(async (req, res, next) => {
 exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     const user = await User.findOne({ where: { email: req.body.email } });
-    const token = signToken(user)
+    
 
     if (!user) {
-        return res.send('User does not exist')
+        return next(new Error('User does not exist'))
     }
     else {
+        const token = signToken(user)
+
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
                 user: process.env.ADMIN_GMAIL_ADDRESS,
-                pass: ADMIN_GMAIL_PASS
+                pass: process.env.ADMIN_GMAIL_PASS
             }
         })
 
@@ -240,7 +245,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
             to: user.email,
             subject: 'Password reset',
 
-            html: ` <p>Please click on the link to reset your ResearcherDNA passsword:<br></p><a href= http://localhost:3000/api/v1/users/resetPassword/${token}>${token}<br><p><b>NB!!: 
+            html: ` <p>Please click on the link to reset your ResearcherDNA passsword:<br></p><a href= http://localhost:3000/api/v1/users/resetPassword/${token}>${token}</p><br><p><b>NB!!: 
                  </b>This link will be inactive within the next 24 hours.</p>`
 
         };
