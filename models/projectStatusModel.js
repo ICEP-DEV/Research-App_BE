@@ -24,5 +24,9 @@ const ProjectStatus = sequelize.define('project_status',{
 // }
 
 // hello()
+ProjectStatus.beforeCreate(async (projectStatus, options) => {
+  
+    console.log("im in the hook")
+  });
 
 module.exports = ProjectStatus;

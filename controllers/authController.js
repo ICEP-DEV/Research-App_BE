@@ -130,7 +130,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   //code goes here....
 
   
-  req.body.password = await bcrypt.hash(req.body.password, 12);
+ 
 
   const user = await User.create(req.body);
 

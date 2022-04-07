@@ -25,5 +25,10 @@ const ProjectType = sequelize.define('project_type', {
 Discipline.hasOne(ProjectType, {onDelete: 'RESTRICT',foreignKey: 'disciplineId'})
 ProjectType.belongsTo(Discipline)
 
+ProjectType.beforeCreate(async (projectStatus, options) => {
+  
+    console.log("im in the hook", options)
+  });
+
 module.exports = ProjectType;
 
