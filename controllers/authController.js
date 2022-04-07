@@ -7,6 +7,7 @@ const messagebird = require("messagebird");
 const { getMaxListeners } = require("../app");
 const { token } = require("morgan");
 const { getUsers } = require("./userController");
+const mail = require("../utils/email");
 
 const signToken = (user) => {
   const username = user.firstName + " " + user.lastName;
@@ -127,87 +128,30 @@ exports.checkUser = (req, res, next) => {
 //
 
 exports.signup = catchAsync(async (req, res, next) => {
-  //code goes here....
-
-  
- 
-
   const user = await User.create(req.body);
 
   const token = signToken(user);
 
-  const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: "researcherdna952@gmail.com",
-      pass: "@icepdevs2022",
-    },
-  });
-
-  const mailOptions = {
-    from: "Admin",
-    to: user.email,
-    subject: "Confrimation Email",
-
-    html: ` <p>Please click on the link to verify your email to activate your ResearcherDNA account:<br></p><a href= http://localhost:3000/api/v1/users/confirmEmail/${token}>${token}<br><p><b>NB!!: 
-             </b>This link will be inactive within the next 24 hours.Failure to verify your email will result into the deactivation of your account. Furthermore, you will have to restart your registration process.</p>`,
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
+  mail.sendEmail(user, token, "Confrimation Email");
 
   res.status(200).json({
     status: "success",
     message: "Awaiting email verification",
   });
-
-  // if (user.verified == false && (!jwt.verify(req.params.token, 'Stack'))) {
-  //     await user.destroy({ where: { email: user.email } })
-  // }
 });
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ where: { email: req.body.email } });
+
+  if (!user) return next(new Error("User does not exist"));
+
   const token = signToken(user);
+  mail.sendEmail(user, token, "Password Reset");
 
-  if (!user) {
-    return res.send("User does not exist");
-  } else {
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: "researcherdna952@gmail.com",
-        pass: "@icepdevs2022",
-      },
-    });
-
-    const mailOptions = {
-      from: "Admin",
-      to: user.email,
-      subject: "Password reset",
-
-      html: ` <p>Please click on the link to reset your ResearcherDNA passsword:<br></p><a href= http://localhost:3000/api/v1/users/resetPassword/${token}>${token}<br><p><b>NB!!: 
-                 </b>This link will be inactive within the next 24 hours.</p>`,
-    };
-
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
-
-    res.status(200).json({
-      status: "success",
-      message: "Reset",
-      user,
-      token,
-    });
-  }
+  res.status(200).json({
+    status: "success",
+    message: "Reset",
+    user,
+    token,
+  });
 });
