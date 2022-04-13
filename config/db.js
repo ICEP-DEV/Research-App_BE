@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(
-    'researcherdna',
+    'researcherdnav1',
      'root',
      '', 
      {

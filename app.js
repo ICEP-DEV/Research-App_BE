@@ -20,6 +20,7 @@ const commentRoutes = require('./routes/commentRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const notesRoutes = require('./routes/notesRoutes');
 const subguideRoutes = require('./routes/subguideRoutes');
+const chatBoxRoutes = require('./routes/chatBoxRoutes');
 
 
 
@@ -47,6 +48,7 @@ app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/blogs', blogRoutes);
 app.use('/api/v1/notes', notesRoutes);
 app.use('/api/v1/subguides', subguideRoutes);
+app.use('/api/v1/chatBox', chatBoxRoutes);
 
 app.use(globalErrHandler)
 //4 SERVER
