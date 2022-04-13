@@ -1,25 +1,13 @@
-const nodemailer = require('nodemailer');
-const bcrypt = require('bcryptjs');
-const User = require('../models/userModel')
-const catchAsync = require('../utils/catchAsync')
-const jwt = require("jsonwebtoken")
-const messagebird = require('messagebird')
-const { getMaxListeners } = require('../app');
-const { token } = require('morgan');
-const { getUsers } = require('./userController');
-const dotenv = require('dotenv')
-dotenv.config({path: './.env'});
-
-
-
-const signToken = user => {
-
-    return jwt.sign({ id: user.id, userType: user.userType, email: user.email },
-        'Stack',
-        { expiresIn: "1d", });
-
-}
-
+const nodemailer = require("nodemailer");
+const bcrypt = require("bcryptjs");
+const User = require("../models/userModel");
+const catchAsync = require("../utils/catchAsync");
+const jwt = require("jsonwebtoken");
+const messagebird = require("messagebird");
+const { getMaxListeners } = require("../app");
+const { token } = require("morgan");
+const { getUsers } = require("./userController");
+const mail = require("../utils/email");
 
 
 
@@ -163,124 +151,29 @@ exports.checkUser = (req, res, next) => {
 // 
 
 exports.signup = catchAsync(async (req, res, next) => {
+  const user = await User.create(req.body);
 
 
-    //code goes here....
-   // const salt = bcrypt.genSalt(8);
-    req.body.password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(8));
-    const user = await User.create(req.body)
+  mail.sendEmail(user, token, "Confrimation Email");
 
-
-
-    const token = signToken(user)
-
-
-    const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: process.env.ADMIN_GMAIL_ADDRESS,
-            pass: process.env.ADMIN_GMAIL_PASS
-        }
-    })
-
-
-    const mailOptions = {
-        from: 'Admin',
-        to: user.email,
-        subject: 'Confrimation Email',
-
-        html: ` <p>Please click on the link to verify your email to activate your ResearcherDNA account:</p><br><a href= http://localhost:3000/api/v1/users/confirmEmail/${token}>${token}</a><br><p><b>NB!!: 
-             </b>This link will be inactive within the next 24 hours.Failure to verify your email will result into the deactivation of your account. Furthermore, you will have to restart your registration process.</p>`
-
-    };
-
-    transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
-
-
-
-    res.status(200).json({
-        status: 'success',
-        message: 'Awaiting email verification',
-        user,
-        token
-    })
-
-    if (user.verified == false && (!jwt.verify(req.params.token, 'Stack'))) {
-        await user.destroy({ where: { email: user.email } })
-    }
-
-})
-
-
+  res.status(200).json({
+    status: "success",
+    message: "Awaiting email verification",
+  });
+});
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ where: { email: req.body.email } });
 
-    const user = await User.findOne({ where: { email: req.body.email } });
-    
+  if (!user) return next(new Error("User does not exist"));
 
-    if (!user) {
-        return next(new Error('User does not exist'))
-    }
-    else {
-        const token = signToken(user)
+  const token = signToken(user);
+  mail.sendEmail(user, token, "Password Reset");
 
-        const transporter = nodemailer.createTransport({
-            service: 'Gmail',
-            auth: {
-                user: process.env.ADMIN_GMAIL_ADDRESS,
-                pass: process.env.ADMIN_GMAIL_PASS
-            }
-        })
-
-
-        const mailOptions = {
-            from: 'Admin',
-            to: user.email,
-            subject: 'Password reset',
-
-            html: ` <p>Please click on the link to reset your ResearcherDNA passsword:<br></p><a href= http://localhost:3000/api/v1/users/resetPassword/${token}>${token}</p><br><p><b>NB!!: 
-                 </b>This link will be inactive within the next 24 hours.</p>`
-
-        };
-
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                console.log('Email sent: ' + info.response);
-            }
-        });
-
-
-
-
-        res.status(200).json({
-            status: 'success',
-            message: 'Reset',
-            user,
-            token
-        })
-
-    }
-
-
-
-
-
-
-})
-
-
-
-
-
-
-
+  res.status(200).json({
+    status: "success",
+    message: "Reset",
+    user,
+    token,
+  });
+});

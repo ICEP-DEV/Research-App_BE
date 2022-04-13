@@ -21,7 +21,10 @@ const handleDublicateEntry = (err) => {
 };
 
 const handleUnknownID = (err) => {
-  const message = 'ID does not exist';
+
+  // console.log('Okwenzeke:', err.fields)
+  
+  const message = `ID does not exist  ${err.fields.join(", ")}`;
   // console.log(message)
   const e = new Error(message);
   e.statusCode = 400;
@@ -41,7 +44,7 @@ const errResponseHandler = (e, res) => {
 }
 
 const errHandler = (err, req, res, next) => {
-  console.log(err)
+  // console.log(err)
   const e = err;
   const code =
     typeof err.parent == "object" && err.parent && "errno" in err.parent
@@ -50,6 +53,7 @@ const errHandler = (err, req, res, next) => {
   if ((code == 1062)) err = handleDublicateEntry(err);
   if(code == 1452) err = handleUnknownID(err);
   if (err.errors) err = modelErrHandle(err);
+  
 
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";

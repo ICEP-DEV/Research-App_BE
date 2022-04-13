@@ -1,4 +1,6 @@
 const Sequelize = require('sequelize')
+const bcrypt = require('bcryptjs')
+const idvalidater = require('south-african-id-validator')
 const sequelize =  require("../config/db") 
 
 
@@ -49,7 +51,18 @@ const User = sequelize.define('user',{
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
-        len:{ args: [13,13], msg: "ID number is invalid"},
+        
+        validate: {
+            len: {args: [13,13], msg: 'Incorrect ID number length'},
+            isCorrectId(value) {
+                const idResult = idvalidater.validateIdNumber(value)
+                
+                if(!idResult.valid) throw  new Error('Invalid ID number!');
+               
+                this.title = idResult.gender =='male'? 'Mr' : 'Miss';
+                
+              }
+        }
  
      },
 
@@ -88,6 +101,13 @@ const User = sequelize.define('user',{
      updatedAt: Sequelize.DATE,
 
 })
+
+User.beforeCreate(async (user, options) => {
+  
+    user.password = await bcrypt.hash(user.password, 12);
+    // console.log("im in the beforeCreate hook User", options, user)
+  });
+
 
 
 module.exports = User;
