@@ -6,11 +6,12 @@ const authController = require('../controllers/authController')
 router
    .route("/")
    .get(authController.checkUser, chatBoxController.viewChats)
-   .post(authController.checkUser,chatBoxController.supervisorChat)
-   //.get(chatBoxController.generalChat);
+   
+   
 
 router
    .route("/:id")
+   .post(chatBoxController.supervisorChat)
    
 
 
