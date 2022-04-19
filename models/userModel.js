@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 const bcrypt = require('bcryptjs')
 const idvalidater = require('south-african-id-validator')
 const sequelize =  require("../config/db") 
+const Discipline = require('./disciplineModel')
 
 
 const User = sequelize.define('user',{
@@ -93,7 +94,7 @@ const User = sequelize.define('user',{
 
      references:{
         type: Sequelize.INTEGER,
-        len:{ args: [1,10], msg: "Password length is not in range 8-16"},
+       
  
      },
 
@@ -101,6 +102,9 @@ const User = sequelize.define('user',{
      updatedAt: Sequelize.DATE,
 
 })
+
+Discipline.hasOne(User, {onDelete: 'RESTRICT',foreignKey:'disciplineId'})
+User.belongsTo(Discipline)
 
 User.beforeCreate(async (user, options) => {
   

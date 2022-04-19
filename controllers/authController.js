@@ -9,7 +9,22 @@ const { token } = require("morgan");
 const { getUsers } = require("./userController");
 const mail = require("../utils/email");
 
-
+const signToken = (user) => {
+    const username = user.firstName + " " + user.lastName;
+  
+    return jwt.sign(
+      {
+        name: username,
+        id: user.id,
+        userType: user.userType,
+        email: user.email,
+        photo: user.photo,
+        disciplineId: user.disciplineId,
+      },
+      "Stack",
+      { expiresIn: "1d" }
+    );
+  };
 
 exports.confirmEmail = catchAsync(async (req, res, next) => {
 

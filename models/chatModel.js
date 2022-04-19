@@ -13,11 +13,11 @@ const Chat = sequelize.define('chat',{
     //     type: Sequelize.INTEGER,
     //     allowNull : false,
     // },
-    dateCreated:{
-        type: Sequelize.DATE,
-       default: Sequelize.NOW,
-       allowNull: false
-    },
+    // dateCreated:{
+    //     type: Sequelize.DATE,
+    //    default: Sequelize.NOW,
+    //    allowNull: false
+    // },
     // chatGroupId:{
     //     type: Sequelize.INTEGER,
     //     allowNull: false
@@ -41,8 +41,7 @@ ChatGroup.hasOne(Chat, {onDelete: 'CASCADE',foreignKey: 'chatGroupId'})
 Chat.belongsTo(ChatGroup)
 
 
-// Chat.sync({alter:true})
-Chat.sync({ alter: true });
+
 // const hello = async()=>{
 //     const logIt = await Chat.findAll({});
 

@@ -2,10 +2,13 @@ const catchAsync  = require('../utils/catchAsync');
 const Chat = require('../models/chatModel')
 const ChatGroup = require('../models/chatGroupModel')
 
+
+
 exports.viewChats = catchAsync(async(req,res,next)=> {
-    
-    const chatGroup = await ChatGroup.findAll({where: {}})
-    const chat = await Chat.findAll({where: {chatGroupId : chatGroup.chatGroupId}})
+    console.log(req.user.disciplineId)
+     const chatGroup = await ChatGroup.findAll({where: {disciplineId: req.user.disciplineId}});
+     
+    const chat = await Chat.findAll({where: {chatGroupId : chatGroup[0].id}})
     
     if(!chatGroup||!chat){
         return next(new Error('Oops!something went wrong.'))
@@ -21,11 +24,13 @@ exports.viewChats = catchAsync(async(req,res,next)=> {
 
 exports.supervisorChat = catchAsync(async(req,res,next) =>{
 
-    const chat = await Chat.create(req.body,{where:{id: req.params.id}})
+    
+
+    const chat = await Chat.create(req.body,{where:{userId: req.user.id}})
 
     res.status(200).json({
         status : "success",
-        message: "Welcome to supervisor endpoint😎",
+        message: "message successfully sent.",
         chat
     })
 })
