@@ -9,12 +9,7 @@ router
    .get(authController.checkUser, chatController.viewChats)
    .post(authController.checkUser,chatController.supervisorChat)
    
-   router
-   .route("/")
-   .get(authController.checkUser, chatGroupController.viewChatGroups)
-   
 
-   
    
 
 

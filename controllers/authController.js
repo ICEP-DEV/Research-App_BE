@@ -30,7 +30,7 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
 
     try {
 
-        const userID = jwt.verify(req.params.token, 'Stack');
+        const userID = jwt.verify(req.params.token, "Stack");
         const user = await User.findOne({ where: { id: userID.id } })
         await user.update({ verified: true }, { where: { id: userID } })
 
