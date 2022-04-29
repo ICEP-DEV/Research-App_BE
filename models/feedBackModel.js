@@ -36,28 +36,28 @@ Feedback.belongsTo(ProjectStatus)
 Goal.hasMany(Feedback, {onDelete:"RESTRICT",foreignKey:"goalId"})
 Feedback.belongsTo(Goal)
 
-const hello = async()=>{
-    const logIt = await Feedback.findAll({
-        include: [
-            {
-              model: User,
-              attributes: { exclude: ["updatedAt", "createdAt", "password"] },
-            },
-            {
-              model: ProjectStatus,
-              attributes: { exclude: ["updatedAt", "createdAt"] },
-            },
-            {
-              model: Goal,
-              attributes: { exclude: ["updatedAt", "createdAt"] },
-            },
-          ]
+// const hello = async()=>{
+//     const logIt = await Feedback.findAll({
+//         include: [
+//             {
+//               model: User,
+//               attributes: { exclude: ["updatedAt", "createdAt", "password"] },
+//             },
+//             {
+//               model: ProjectStatus,
+//               attributes: { exclude: ["updatedAt", "createdAt"] },
+//             },
+//             {
+//               model: Goal,
+//               attributes: { exclude: ["updatedAt", "createdAt"] },
+//             },
+//           ]
         
-    });
+//     });
 
-    console.log(logIt)
-}
+//     console.log(logIt)
+// }
 
-hello()
+// hello()
 
 module.exports = Feedback;
