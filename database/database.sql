@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2022 at 05:28 AM
--- Server version: 10.4.18-MariaDB
--- PHP Version: 7.3.27
+-- Generation Time: Apr 29, 2022 at 09:57 AM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,7 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `researcherdna`
 --
-
 DROP DATABASE IF EXISTS researcherdna;
 
 CREATE DATABASE researcherdna;
@@ -47,21 +46,22 @@ DELIMITER ;
 
 CREATE TABLE `action_items` (
   `id` int(10) NOT NULL COMMENT 'ID uniquely describes an action item and sets it apart from every other action item',
-  `due_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Every action item has its own due date.\r\nThis allows the user to decide when they want to finish working on an action \r\nOr it allows a user to plan their action items and see that they have achieved them.',
+  `dueDate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Every action item has its own due date.\r\nThis allows the user to decide when they want to finish working on an action \r\nOr it allows a user to plan their action items and see that they have achieved them.',
   `title` varchar(255) NOT NULL COMMENT 'This allows the user to give their action item a shorthand way of easily identifying it from every other action item.',
-  `start_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'This allows the user to plan when they want to start with their action item',
   `text` text NOT NULL COMMENT 'Here the user is given the opportunity to write anything which may include how they are going to to it, when they are going to do it.\r\nHow they are going to do it and so on',
-  `status` int(2) NOT NULL COMMENT 'The status here allows the user to click if the action item is complete or still pending and so on.',
+  `projectStatusId` int(2) NOT NULL COMMENT 'The status here allows the user to click if the action item is complete or still pending and so on.',
   `goalId` int(10) NOT NULL COMMENT 'This  allows the user to link an action item to a bigger goal or to give the an action item its parent goal',
-  `createdBy` int(10) NOT NULL COMMENT 'This allows the system to know who owns the note - since others since we will have many individuals creating action-items'
+  `userId` int(10) NOT NULL COMMENT 'This allows the system to know who owns the note - since others since we will have many individuals creating action-items',
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `action_items`
 --
 
-INSERT INTO `action_items` (`id`, `due_date`, `title`, `start_date`, `text`, `status`, `goalId`, `createdBy`) VALUES
-(1, '2022-04-23 20:10:03', 'Learn Harvard referencing Guide', '2022-04-23 19:59:04', '- Look for books that teach harvard guide\r\n- Study the books that teach about harvard guide.\r\n- Practive harvard guide', 1, 1, 2);
+INSERT INTO `action_items` (`id`, `dueDate`, `title`, `text`, `projectStatusId`, `goalId`, `userId`, `createdAt`, `updatedAt`) VALUES
+(1, '2022-04-23 20:10:03', 'Learn Harvard referencing Guide', '- Look for books that teach harvard guide\r\n- Study the books that teach about harvard guide.\r\n- Practive harvard guide', 1, 1, 2, '2022-04-28 14:09:46', '2022-04-28 14:09:46');
 
 -- --------------------------------------------------------
 
@@ -88,55 +88,57 @@ INSERT INTO `blogs` (`id`, `title`, `post`, `userId`, `createdAt`, `updatedAt`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chat`
+-- Table structure for table `chatgroups`
 --
 
-CREATE TABLE `chat` (
-  `id` int(10) NOT NULL,
-  `senderId` int(10) NOT NULL,
-  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
-  `chatGroupId` int(5) NOT NULL,
-  `text` text NOT NULL
+CREATE TABLE `chatgroups` (
+  `id` int(2) NOT NULL,
+  `userId` int(10) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `privileges` int(2) NOT NULL DEFAULT 1,
+  `departmentId` int(5) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `chat`
+-- Dumping data for table `chatgroups`
 --
 
-INSERT INTO `chat` (`id`, `senderId`, `dateCreated`, `chatGroupId`, `text`) VALUES
-(1, 1, '2022-04-08 09:47:05', 1, '1. Pick Your People\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\n2. Review Your Texts\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\n3. Get Involved in the Group Chat\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\n4. Stay on Topic\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\n5. Be Patient With Others in a Group Chat\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\nWhat Should You Not Do in a Group Chat?\ngroup chat etiquette\n6. Don’t Give Out Sensitive Information\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\n7. Avoid Private Conversations in a Group Chat\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\n8. Don’t Text Bomb\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\n9. Refrain From Overusing Emojis\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.'),
-(2, 1, '2022-04-08 09:47:06', 2, '1. Pick Your People\r\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\r\n2. Review Your Texts\r\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\r\n3. Get Involved in the Group Chat\r\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\r\n4. Stay on Topic\r\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\r\n5. Be Patient With Others in a Group Chat\r\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\r\nWhat Should You Not Do in a Group Chat?\r\ngroup chat etiquette\r\n6. Don’t Give Out Sensitive Information\r\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\r\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\r\n7. Avoid Private Conversations in a Group Chat\r\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\r\n8. Don’t Text Bomb\r\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\r\n9. Refrain From Overusing Emojis\r\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.'),
-(3, 1, '2022-04-08 09:47:06', 3, '1. Pick Your People\r\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\r\n2. Review Your Texts\r\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\r\n3. Get Involved in the Group Chat\r\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\r\n4. Stay on Topic\r\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\r\n5. Be Patient With Others in a Group Chat\r\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\r\nWhat Should You Not Do in a Group Chat?\r\ngroup chat etiquette\r\n6. Don’t Give Out Sensitive Information\r\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\r\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\r\n7. Avoid Private Conversations in a Group Chat\r\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\r\n8. Don’t Text Bomb\r\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\r\n9. Refrain From Overusing Emojis\r\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.'),
-(4, 1, '2022-04-08 09:47:06', 4, '1. Pick Your People\r\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\r\n2. Review Your Texts\r\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\r\n3. Get Involved in the Group Chat\r\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\r\n4. Stay on Topic\r\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\r\n5. Be Patient With Others in a Group Chat\r\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\r\nWhat Should You Not Do in a Group Chat?\r\ngroup chat etiquette\r\n6. Don’t Give Out Sensitive Information\r\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\r\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\r\n7. Avoid Private Conversations in a Group Chat\r\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\r\n8. Don’t Text Bomb\r\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\r\n9. Refrain From Overusing Emojis\r\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.'),
-(5, 1, '2022-04-08 09:47:06', 5, '1. Pick Your People\r\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\r\n2. Review Your Texts\r\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\r\n3. Get Involved in the Group Chat\r\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\r\n4. Stay on Topic\r\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\r\n5. Be Patient With Others in a Group Chat\r\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\r\nWhat Should You Not Do in a Group Chat?\r\ngroup chat etiquette\r\n6. Don’t Give Out Sensitive Information\r\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\r\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\r\n7. Avoid Private Conversations in a Group Chat\r\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\r\n8. Don’t Text Bomb\r\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\r\n9. Refrain From Overusing Emojis\r\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.');
+INSERT INTO `chatgroups` (`id`, `userId`, `title`, `privileges`, `departmentId`, `createdAt`, `updatedAt`) VALUES
+(1, 1, 'Noticeboard', 1, 1, '2022-04-28 14:16:19', '2022-04-28 14:16:19'),
+(2, 1, 'Supervisor Chat', 1, 2, '2022-04-28 14:16:19', '2022-04-28 14:16:19'),
+(3, 1, 'Open Chat', 1, 3, '2022-04-28 14:16:19', '2022-04-28 14:16:19'),
+(4, 1, 'Open Chat', 1, 4, '2022-04-28 14:16:19', '2022-04-28 14:16:19'),
+(5, 1, 'Open Chat', 1, 5, '2022-04-28 14:16:19', '2022-04-28 14:16:19'),
+(6, 1, 'Research Ethics', 3, 7, '2022-04-28 14:16:19', '2022-04-28 14:16:19'),
+(8, 1, 'Supervisor Chat', 1, 1, '2022-04-28 14:16:19', '2022-04-28 14:16:19');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chatgroup`
+-- Table structure for table `chats`
 --
 
-CREATE TABLE `chatgroup` (
-  `id` int(2) NOT NULL,
-  `createdBy` int(10) NOT NULL,
-  `dateCreated` datetime NOT NULL DEFAULT current_timestamp(),
-  `title` varchar(255) NOT NULL,
-  `privileges` int(2) NOT NULL DEFAULT 1,
-  `departmentId` int(5) NOT NULL
+CREATE TABLE `chats` (
+  `id` int(10) NOT NULL,
+  `userId` int(10) NOT NULL,
+  `chatGroupId` int(5) NOT NULL,
+  `text` text NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `chatgroup`
+-- Dumping data for table `chats`
 --
 
-INSERT INTO `chatgroup` (`id`, `createdBy`, `dateCreated`, `title`, `privileges`, `departmentId`) VALUES
-(1, 1, '2022-04-08 09:47:05', 'Noticeboard', 1, 1),
-(2, 1, '2022-04-08 09:47:05', 'Supervisor Chat', 1, 2),
-(3, 1, '2022-04-08 09:47:05', 'Open Chat', 1, 3),
-(4, 1, '2022-04-08 09:47:05', 'Open Chat', 1, 4),
-(5, 1, '2022-04-08 09:47:05', 'Open Chat', 1, 5),
-(6, 1, '2022-04-08 12:01:57', 'Research Ethics', 3, 7),
-(8, 1, '2022-04-11 15:51:19', 'Supervisor Chat', 1, 1);
+INSERT INTO `chats` (`id`, `userId`, `chatGroupId`, `text`, `createdAt`, `updatedAt`) VALUES
+(1, 1, 1, '1. Pick Your People\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\n2. Review Your Texts\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\n3. Get Involved in the Group Chat\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\n4. Stay on Topic\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\n5. Be Patient With Others in a Group Chat\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\nWhat Should You Not Do in a Group Chat?\ngroup chat etiquette\n6. Don’t Give Out Sensitive Information\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\n7. Avoid Private Conversations in a Group Chat\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\n8. Don’t Text Bomb\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\n9. Refrain From Overusing Emojis\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.', '2022-04-28 14:17:12', '2022-04-28 14:17:12'),
+(2, 1, 2, '1. Pick Your People\r\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\r\n2. Review Your Texts\r\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\r\n3. Get Involved in the Group Chat\r\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\r\n4. Stay on Topic\r\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\r\n5. Be Patient With Others in a Group Chat\r\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\r\nWhat Should You Not Do in a Group Chat?\r\ngroup chat etiquette\r\n6. Don’t Give Out Sensitive Information\r\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\r\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\r\n7. Avoid Private Conversations in a Group Chat\r\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\r\n8. Don’t Text Bomb\r\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\r\n9. Refrain From Overusing Emojis\r\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.', '2022-04-28 14:17:12', '2022-04-28 14:17:12'),
+(3, 1, 3, '1. Pick Your People\r\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\r\n2. Review Your Texts\r\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\r\n3. Get Involved in the Group Chat\r\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\r\n4. Stay on Topic\r\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\r\n5. Be Patient With Others in a Group Chat\r\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\r\nWhat Should You Not Do in a Group Chat?\r\ngroup chat etiquette\r\n6. Don’t Give Out Sensitive Information\r\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\r\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\r\n7. Avoid Private Conversations in a Group Chat\r\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\r\n8. Don’t Text Bomb\r\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\r\n9. Refrain From Overusing Emojis\r\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.', '2022-04-28 14:17:12', '2022-04-28 14:17:12'),
+(4, 1, 4, '1. Pick Your People\r\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\r\n2. Review Your Texts\r\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\r\n3. Get Involved in the Group Chat\r\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\r\n4. Stay on Topic\r\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\r\n5. Be Patient With Others in a Group Chat\r\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\r\nWhat Should You Not Do in a Group Chat?\r\ngroup chat etiquette\r\n6. Don’t Give Out Sensitive Information\r\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\r\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\r\n7. Avoid Private Conversations in a Group Chat\r\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\r\n8. Don’t Text Bomb\r\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\r\n9. Refrain From Overusing Emojis\r\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.', '2022-04-28 14:17:12', '2022-04-28 14:17:12'),
+(5, 1, 5, '1. Pick Your People\r\nThe number of folks you can include in a chat will be dependent on which chat app you’re using. However, just because you can talk to 20 or 25 people doesn’t mean you should! Once you get beyond a certain number, it can get difficult for everyone to communicate effectively. Be sure to keep your group a manageable size.\r\n2. Review Your Texts\r\nWe’ve all experienced those moments where it’s hard to know how to read a text. That’s why when it comes to group texting it’s more important than ever to think before you write! Instead of sending a snap text, make sure you’ve reviewed your response. Have a look at your punctuation and make sure that word recognition or auto-correct worked correctly.\r\n3. Get Involved in the Group Chat\r\nIt can be hard to keep up with some of the group chat conversations. However, it’s important to respond now and then so your fellow group chatters know that you’re still available. Instead of hitting mute, pop in every once in a while, and let people know what you think.\r\n4. Stay on Topic\r\nA chat with six or seven people can be pretty busy! That’s why it’s important that the content stays on topic. Instead of going off on unrelated issues, try a direct message or telephone call. Once the topic has veered, it can be confusing to get back to the root of the matter.\r\n5. Be Patient With Others in a Group Chat\r\nIt can be difficult to respond to a text blitz from one person, but it’s more complicated with group chat conversations! Instead of asking multiple questions, wait for a response. If everyone has to jump in and answer more than one question, the thread can get too busy too fast.\r\nWhat Should You Not Do in a Group Chat?\r\ngroup chat etiquette\r\n6. Don’t Give Out Sensitive Information\r\nIf you’re part of a larger group chat, there’s a chance that you might not know all the parties involved. For that reason, it’s important to be cautious about the information you share. Giving out information passwords, addresses, and even credit card numbers is not safe.\r\nEven if you know everyone, there’s a chance your chat data isn’t safe on many different texting apps. So choose a secure messenger like FamilyApp to keep all your data private.\r\n7. Avoid Private Conversations in a Group Chat\r\nIt’s one thing to direct message people individually if you want to talk about things. But if you’re on a group text, stick with conversations that relate to the whole group.\r\n8. Don’t Text Bomb\r\nNo one wants to receive 20 or 30 notifications because they’re in a group chat. It can become impossible to respond and will make it hard for others to stay involved. Stick with easy responses, condense your texts, and be direct.\r\n9. Refrain From Overusing Emojis\r\nEmojis and emoticons can be a fun way to be more expressive in a text. But when it comes to group texting, they can make it much busier. While you can still use them, it’s important to minimize your use so it doesn’t overwhelm the chat.', '2022-04-28 14:17:12', '2022-04-28 14:17:12');
 
 -- --------------------------------------------------------
 
@@ -208,27 +210,52 @@ INSERT INTO `faculties` (`id`, `name`, `description`, `updatedAt`, `createdAt`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `goal`
+-- Table structure for table `feedbacks`
 --
 
-CREATE TABLE `goal` (
-  `id` int(10) NOT NULL COMMENT 'A unique identifer for the goal that has been created',
-  `title` varchar(255) NOT NULL COMMENT 'This gives a goal a suitable name that the user can use to refere to a goal',
-  `due_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Outlines the date that the goal is going to end',
-  `start_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Defines when the goal is going to start to be employed or acted upon',
-  `outcome` text NOT NULL COMMENT 'Here the user can write what they want to have as the result of the gaol (This attribute my in some ways function as an acceptance criteria but it is not realy it)',
-  `acceptance_criteria` text NOT NULL COMMENT 'Allows the user to define what sets the goal as complete',
-  `status` int(1) NOT NULL DEFAULT 0 COMMENT 'Creates a way for the student to know the goal that they are working on.',
-  `project_id` int(10) NOT NULL COMMENT 'Links the goal to a specific project that the student is working on.',
-  `createdBy` int(10) NOT NULL
+CREATE TABLE `feedbacks` (
+  `id` int(10) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `text` text NOT NULL,
+  `userId` int(10) NOT NULL COMMENT 'supervisor and student',
+  `goalId` int(10) NOT NULL,
+  `status` int(2) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `goal`
+-- Dumping data for table `feedbacks`
 --
 
-INSERT INTO `goal` (`id`, `title`, `due_date`, `start_date`, `outcome`, `acceptance_criteria`, `status`, `project_id`, `createdBy`) VALUES
-(1, 'Study all the guidelines', '2022-04-23 20:05:38', '2022-04-23 19:31:43', '- I want you to know harvard referencing.\r\n- I want you to know the structure of research\r\n- I want you to know why we conduct research the way we do.\r\n- I want you to share with me some researches that you have discovered through you study.', '- Give me a written paper describing your understanding of what you came to learn.\r\n- Give me a detailed summary of two articles together with their proper reference (note that the articles may be any of your choice)', 1, 1, 1);
+INSERT INTO `feedbacks` (`id`, `title`, `text`, `userId`, `goalId`, `status`, `createdAt`, `updatedAt`) VALUES
+(1, 'Title not properly formatted', 'Matlala - I see that you did you put your title in order, can you please have a look at it, - I provided some good guides for you.\r\n\r\nThe main issue that we have here is that your title is missing substance, when I read your title I get a feeling that it is not in relation to what your research is about.\r\nYour title is missing some words that are going to make it relatable with the research that you are conducting.\r\n\r\nWork on this one important issue then we can see how we can move forward.\r\n\r\nRemember you are running out of time.\r\nso fix it as soon as you can and then I will give you my feedback', 1, 1, 1, '2022-04-28 14:25:10', '2022-04-28 14:25:10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `goals`
+--
+
+CREATE TABLE `goals` (
+  `id` int(10) NOT NULL COMMENT 'A unique identifer for the goal that has been created',
+  `title` varchar(255) NOT NULL COMMENT 'This gives a goal a suitable name that the user can use to refere to a goal',
+  `dueDate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Outlines the date that the goal is going to end',
+  `outcome` text NOT NULL COMMENT 'Here the user can write what they want to have as the result of the gaol (This attribute my in some ways function as an acceptance criteria but it is not realy it)',
+  `acceptanceCriteria` text NOT NULL COMMENT 'Allows the user to define what sets the goal as complete',
+  `projectStatusId` int(1) NOT NULL DEFAULT 0 COMMENT 'Creates a way for the student to know the goal that they are working on.',
+  `projectId` int(10) NOT NULL COMMENT 'Links the goal to a specific project that the student is working on.',
+  `userId` int(10) NOT NULL COMMENT 'supervisor',
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `goals`
+--
+
+INSERT INTO `goals` (`id`, `title`, `dueDate`, `outcome`, `acceptanceCriteria`, `projectStatusId`, `projectId`, `userId`, `createdAt`, `updatedAt`) VALUES
+(1, 'Study all the guidelines', '2022-04-23 20:05:38', '- I want you to know harvard referencing.\r\n- I want you to know the structure of research\r\n- I want you to know why we conduct research the way we do.\r\n- I want you to share with me some researches that you have discovered through you study.', '- Give me a written paper describing your understanding of what you came to learn.\r\n- Give me a detailed summary of two articles together with their proper reference (note that the articles may be any of your choice)', 1, 1, 1, '2022-04-28 14:14:37', '2022-04-28 14:14:37');
 
 -- --------------------------------------------------------
 
@@ -450,29 +477,6 @@ INSERT INTO `subguides` (`id`, `text`, `guidelineId`, `createdAt`, `updatedAt`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `supervisorfeedback`
---
-
-CREATE TABLE `supervisorfeedback` (
-  `id` int(10) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `title` varchar(255) NOT NULL,
-  `text` text NOT NULL,
-  `supervisorId` int(10) NOT NULL,
-  `goalId` int(10) NOT NULL,
-  `status` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `supervisorfeedback`
---
-
-INSERT INTO `supervisorfeedback` (`id`, `date`, `title`, `text`, `supervisorId`, `goalId`, `status`) VALUES
-(1, '2022-04-23 20:26:44', 'Title not properly formatted', 'Matlala - I see that you did you put your title in order, can you please have a look at it, - I provided some good guides for you.\r\n\r\nThe main issue that we have here is that your title is missing substance, when I read your title I get a feeling that it is not in relation to what your research is about.\r\nYour title is missing some words that are going to make it relatable with the research that you are conducting.\r\n\r\nWork on this one important issue then we can see how we can move forward.\r\n\r\nRemember you are running out of time.\r\nso fix it as soon as you can and then I will give you my feedback', 1, 1, 1);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -487,7 +491,7 @@ CREATE TABLE `users` (
   `photo` varchar(255) NOT NULL DEFAULT 'Get the API',
   `userType` varchar(15) NOT NULL,
   `references` int(10) DEFAULT NULL,
-  `departmentId` int(10) DEFAULT NULL,
+  `disciplineId` int(10) DEFAULT NULL,
   `verified` tinyint(1) NOT NULL DEFAULT 0,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
@@ -497,9 +501,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `password`, `idNumber`, `title`, `photo`, `userType`, `references`, `departmentId`, `verified`, `createdAt`, `updatedAt`) VALUES
-(1, 'Shiko', 'Matlala', 'shikomatlala@gmail.com', 'shiko', '9511275418082', 'Mr', 'Get the API', '1', NULL, NULL, 0, '2022-03-17 09:34:15', '2022-03-17 09:34:15'),
-(2, 'Katleho', 'Makhoba', 'rkmwastaken@gmail.com', '123456', '1111111111111', NULL, 'Get the API', '', NULL, NULL, 0, '2022-03-25 15:52:50', '2022-03-25 15:52:50');
+INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `password`, `idNumber`, `title`, `photo`, `userType`, `references`, `disciplineId`, `verified`, `createdAt`, `updatedAt`) VALUES
+(1, 'Shiko', 'Matlala', '', 'shiko', '9511275418082', 'Mr', 'Get the API', '1', NULL, NULL, 0, '2022-03-17 09:34:15', '2022-03-17 09:34:15'),
+(2, 'Katleho', 'Makhoba', 'rkmwastaken@gmail.com', '123456', '1111111111111', NULL, 'Get the API', '', NULL, NULL, 0, '2022-03-25 15:52:50', '2022-03-25 15:52:50'),
+(3, 'Shiko', 'Matlala', 'shikomatlala2@gmail.com', '$2a$12$m6MLnMKeo', '2001114386089', 'Miss', 'default.png', '1', NULL, NULL, 1, '2022-04-28 12:33:18', '2022-04-28 12:33:18');
 
 --
 -- Indexes for dumped tables
@@ -510,9 +515,9 @@ INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `password`, `idNumb
 --
 ALTER TABLE `action_items`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `constraint_fk_action_item_creator` (`createdBy`),
+  ADD KEY `constraint_fk_action_item_creator` (`userId`),
   ADD KEY `constraint_fk_action_item_goal_id` (`goalId`),
-  ADD KEY `action_item_fk_status_project_status` (`status`);
+  ADD KEY `action_item_fk_status_project_status` (`projectStatusId`);
 
 --
 -- Indexes for table `blogs`
@@ -522,20 +527,20 @@ ALTER TABLE `blogs`
   ADD KEY `userId` (`userId`);
 
 --
--- Indexes for table `chat`
+-- Indexes for table `chatgroups`
 --
-ALTER TABLE `chat`
+ALTER TABLE `chatgroups`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `senderId` (`senderId`),
-  ADD KEY `chatGroupId` (`chatGroupId`);
+  ADD KEY `createdBy` (`userId`),
+  ADD KEY `departmentId` (`departmentId`);
 
 --
--- Indexes for table `chatgroup`
+-- Indexes for table `chats`
 --
-ALTER TABLE `chatgroup`
+ALTER TABLE `chats`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `createdBy` (`createdBy`),
-  ADD KEY `departmentId` (`departmentId`);
+  ADD KEY `senderId` (`userId`),
+  ADD KEY `chatGroupId` (`chatGroupId`);
 
 --
 -- Indexes for table `comments`
@@ -560,13 +565,22 @@ ALTER TABLE `faculties`
   ADD KEY `facultyId` (`id`);
 
 --
--- Indexes for table `goal`
+-- Indexes for table `feedbacks`
 --
-ALTER TABLE `goal`
+ALTER TABLE `feedbacks`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `project_id_constraint` (`project_id`),
-  ADD KEY `createdBy` (`createdBy`),
-  ADD KEY `constraint_fk_status_project_status` (`status`);
+  ADD KEY `constraint_fk_supervisorfeedback_goal` (`goalId`),
+  ADD KEY `constraint_fk_supervisorid_user` (`userId`),
+  ADD KEY `supervisorfeedback_fk_status_project_status` (`status`);
+
+--
+-- Indexes for table `goals`
+--
+ALTER TABLE `goals`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `project_id_constraint` (`projectId`),
+  ADD KEY `createdBy` (`userId`),
+  ADD KEY `constraint_fk_status_project_status` (`projectStatusId`);
 
 --
 -- Indexes for table `guidelines`
@@ -625,15 +639,6 @@ ALTER TABLE `subguides`
   ADD KEY `guidelineId` (`guidelineId`);
 
 --
--- Indexes for table `supervisorfeedback`
---
-ALTER TABLE `supervisorfeedback`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `constraint_fk_supervisorfeedback_goal` (`goalId`),
-  ADD KEY `constraint_fk_supervisorid_user` (`supervisorId`),
-  ADD KEY `supervisorfeedback_fk_status_project_status` (`status`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -642,7 +647,7 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `idNumber` (`idNumber`,`userType`),
   ADD UNIQUE KEY `unique_index_for_user` (`idNumber`,`userType`),
   ADD KEY `references` (`references`),
-  ADD KEY `departmentId` (`departmentId`);
+  ADD KEY `departmentId` (`disciplineId`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -661,16 +666,16 @@ ALTER TABLE `blogs`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `chat`
+-- AUTO_INCREMENT for table `chatgroups`
 --
-ALTER TABLE `chat`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `chatgroups`
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `chatgroup`
+-- AUTO_INCREMENT for table `chats`
 --
-ALTER TABLE `chatgroup`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `chats`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -691,9 +696,15 @@ ALTER TABLE `faculties`
   MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `goal`
+-- AUTO_INCREMENT for table `feedbacks`
 --
-ALTER TABLE `goal`
+ALTER TABLE `feedbacks`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `goals`
+--
+ALTER TABLE `goals`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'A unique identifer for the goal that has been created', AUTO_INCREMENT=2;
 
 --
@@ -739,16 +750,10 @@ ALTER TABLE `subguides`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
--- AUTO_INCREMENT for table `supervisorfeedback`
---
-ALTER TABLE `supervisorfeedback`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -758,9 +763,9 @@ ALTER TABLE `users`
 -- Constraints for table `action_items`
 --
 ALTER TABLE `action_items`
-  ADD CONSTRAINT `action_item_fk_status_project_status` FOREIGN KEY (`status`) REFERENCES `project_statuses` (`id`),
-  ADD CONSTRAINT `constraint_fk_action_item_creator` FOREIGN KEY (`createdBy`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `constraint_fk_action_item_goal_id` FOREIGN KEY (`goalId`) REFERENCES `goal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `action_item_fk_status_project_status` FOREIGN KEY (`projectStatusId`) REFERENCES `project_statuses` (`id`),
+  ADD CONSTRAINT `constraint_fk_action_item_creator` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `constraint_fk_action_item_goal_id` FOREIGN KEY (`goalId`) REFERENCES `goals` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `blogs`
@@ -769,18 +774,18 @@ ALTER TABLE `blogs`
   ADD CONSTRAINT `blog_idfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `chat`
+-- Constraints for table `chatgroups`
 --
-ALTER TABLE `chat`
-  ADD CONSTRAINT `chat_idfk_1` FOREIGN KEY (`senderId`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `chat_idfk_2` FOREIGN KEY (`chatGroupId`) REFERENCES `chatgroup` (`id`);
+ALTER TABLE `chatgroups`
+  ADD CONSTRAINT `chatgroup_idfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `chatgroup_idfk_2` FOREIGN KEY (`departmentId`) REFERENCES `disciplines` (`id`);
 
 --
--- Constraints for table `chatgroup`
+-- Constraints for table `chats`
 --
-ALTER TABLE `chatgroup`
-  ADD CONSTRAINT `chatgroup_idfk_1` FOREIGN KEY (`createdBy`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `chatgroup_idfk_2` FOREIGN KEY (`departmentId`) REFERENCES `disciplines` (`id`);
+ALTER TABLE `chats`
+  ADD CONSTRAINT `chat_idfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `chat_idfk_2` FOREIGN KEY (`chatGroupId`) REFERENCES `chatgroups` (`id`);
 
 --
 -- Constraints for table `comments`
@@ -796,12 +801,20 @@ ALTER TABLE `disciplines`
   ADD CONSTRAINT `disciplines_ibfk_1` FOREIGN KEY (`facultyId`) REFERENCES `faculties` (`id`);
 
 --
--- Constraints for table `goal`
+-- Constraints for table `feedbacks`
 --
-ALTER TABLE `goal`
-  ADD CONSTRAINT `constraint_fk_status_project_status` FOREIGN KEY (`status`) REFERENCES `project_statuses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `goal_ibfk_1` FOREIGN KEY (`createdBy`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `project_id_constraint` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `feedbacks`
+  ADD CONSTRAINT `constraint_fk_supervisorfeedback_goal` FOREIGN KEY (`goalId`) REFERENCES `goals` (`id`),
+  ADD CONSTRAINT `constraint_fk_supervisorid_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `supervisorfeedback_fk_status_project_status` FOREIGN KEY (`status`) REFERENCES `project_statuses` (`id`);
+
+--
+-- Constraints for table `goals`
+--
+ALTER TABLE `goals`
+  ADD CONSTRAINT `constraint_fk_status_project_status` FOREIGN KEY (`projectStatusId`) REFERENCES `project_statuses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `goals_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `project_id_constraint` FOREIGN KEY (`projectId`) REFERENCES `projects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `guidelines`
@@ -847,19 +860,11 @@ ALTER TABLE `subguides`
   ADD CONSTRAINT `subguides_idfk_1` FOREIGN KEY (`guidelineId`) REFERENCES `guidelines` (`id`);
 
 --
--- Constraints for table `supervisorfeedback`
---
-ALTER TABLE `supervisorfeedback`
-  ADD CONSTRAINT `constraint_fk_supervisorfeedback_goal` FOREIGN KEY (`goalId`) REFERENCES `goal` (`id`),
-  ADD CONSTRAINT `constraint_fk_supervisorid_user` FOREIGN KEY (`supervisorId`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `supervisorfeedback_fk_status_project_status` FOREIGN KEY (`status`) REFERENCES `project_statuses` (`id`);
-
---
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`references`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`departmentId`) REFERENCES `disciplines` (`id`);
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`disciplineId`) REFERENCES `disciplines` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

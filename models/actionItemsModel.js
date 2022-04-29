@@ -38,5 +38,28 @@ ActionItem.belongsTo(ProjectStatus)
 Goal.hasMany(ActionItem, {onDelete:"RESTRICT",foreignKey:"goalId"})
 ActionItem.belongsTo(Goal)
 
+// const hello = async()=>{
+//     const logIt = await ActionItem.findAll({
+//         include: [
+//             {
+//               model: User,
+//               attributes: { exclude: ["updatedAt", "createdAt", "password"] },
+//             },
+//             {
+//               model: ProjectStatus,
+//               attributes: { exclude: ["updatedAt", "createdAt"] },
+//             },
+//             {
+//               model: Goal,
+//               attributes: { exclude: ["updatedAt", "createdAt"] },
+//             },
+//           ]
+        
+//     });
+
+//     console.log(logIt)
+// }
+
+// hello()
 
 module.exports = ActionItem;
