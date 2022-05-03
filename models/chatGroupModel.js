@@ -16,11 +16,6 @@ const ChatGroup = sequelize.define('chatGroup', {
   privileges:{
     type: Sequelize.INTEGER
   },
-  dateCreated:{
-    type: Sequelize.DATE
-  },
-
-
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
 })

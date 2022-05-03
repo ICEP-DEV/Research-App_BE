@@ -5,7 +5,7 @@ const ChatGroup = require('../models/chatGroupModel')
 exports.viewChatGroups = catchAsync(async(req,res,next)=> {
     console.log(req.user.disciplineId)
      
-    const chatGroups = await ChatGroup.findAll({where: {disciplineId: req.user.disciplineId}});
+    const chatGroups = await ChatGroup.findAll({where: {disciplineId: req.params.id}});
     
     
     if(!chatGroups){

@@ -3,7 +3,7 @@ const chatGroupController = require("../controllers/chatGroupController");
 const authController = require("../controllers/authController");
 
 router
-  .route("/")
+  .route("/discipline/:id")
   .get(authController.checkUser, chatGroupController.viewChatGroups)
   .post(authController.checkUser,chatGroupController.createChatGroup)
 
