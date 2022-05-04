@@ -22,6 +22,7 @@ const notesRoutes = require('./routes/notesRoutes');
 const subguideRoutes = require('./routes/subguideRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const chatGroupRoutes = require('./routes/chatGroupRoutes');
+const actionItemsRoutes = require('./routes/actionItemsRoutes');
 
 
 
@@ -52,6 +53,7 @@ app.use('/api/v1/notes', notesRoutes);
 app.use('/api/v1/subguides', subguideRoutes);
 app.use('/api/v1/chats', chatRoutes);
 app.use('/api/v1/chat_groups', chatGroupRoutes);
+app.use('/api/v1/actionItems', actionItemsRoutes)
 
 app.use(globalErrHandler)
 //4 SERVER
