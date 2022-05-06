@@ -5,11 +5,11 @@ const Chat = require('../models/chatModel')
 
 
 exports.viewChats = catchAsync(async(req,res,next)=> {
-    console.log("hey",req.query)
+    console.log("hey",req.param)
     
     
      
-    const chat = await Chat.findAll({where: {chatGroupId : req.query.id}})
+    const chat = await Chat.findAll({where: {chatGroupId : req.param.id}})
     
     if(!chat){
         return next(new Error('Oops!something went wrong.'))
