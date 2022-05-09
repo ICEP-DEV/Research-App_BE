@@ -7,7 +7,7 @@ const authController = require('../controllers/authController')
 router
    .route("/")
    .get(authController.checkUser, chatController.viewChats)
-   .post(authController.checkUser,chatController.supervisorChat)
+   .post(authController.checkUser,chatController.sendMessage)
    
 
    

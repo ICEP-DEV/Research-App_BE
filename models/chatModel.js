@@ -48,6 +48,6 @@ Chat.belongsTo(ChatGroup)
 //     console.log(logIt)
 // }
 
-// hello()
+//  hello()
 
 module.exports = Chat;

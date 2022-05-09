@@ -2,7 +2,7 @@ const catchAsync = require("../utils/catchAsync");
 const ActionItem = require("../models/actionItemsModel") 
 
 exports.createActionItem = catchAsync(async(req, res,next) =>{
-   const actionItem = await ActionItem.create({where:{userId : req.params.id}});
+   const actionItem = await ActionItem.create(req.body);
 
    res.status(200).json({
     status : "success",
@@ -19,7 +19,8 @@ exports.viewActionItems = catchAsync(async (req, res, next) => {
     
     res.status(200).json({
         status: "success",
-        message: "Welcome to actionItem endpoint😎"
+        message: "Welcome to actionItem endpoint😎",
+        actionItems
 
     })
 })
