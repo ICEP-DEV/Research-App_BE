@@ -28,7 +28,7 @@ exports.getUser = catchAsync( async(req, res, next) =>{
 
     // console.log(req.user)
 
-    if(req.user.userType == 2 || req.user.userType == 3 && req.body.email) options = {email : req.body.email}
+    if(req.user.userType == 2 || req.user.userType == 3 && req.body.email) options = {email : req.user.email}
 
 
     const user = await User.findOne({
