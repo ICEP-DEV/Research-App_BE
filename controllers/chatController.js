@@ -23,7 +23,7 @@ exports.viewChats = catchAsync(async(req,res,next)=> {
 
 
 exports.sendMessage = catchAsync(async(req,res,next) =>{
-
+   req.body.userId = req.user.id;
    const body = req.body
    
 

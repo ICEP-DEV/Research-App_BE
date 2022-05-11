@@ -3,11 +3,12 @@ const catchAsync  = require('../utils/catchAsync');
 const Goal = require('../models/goalModel');
 
 exports.createGoal = catchAsync(async(req, res, next) => {
-    const user = req.user.id;
-    const goal = await Goal.create(req.body, {where:{userId : req.params.id}})
-    const id = goal.userId
+    req.body.userId = req.user.id;
+    const goal = await Goal.create(req.body)
+    
+    
 
-    if(!goal)return next(new Error('Document does not exist'));
+    if(!goal)return next(new Error('Oops! something went wrong.'));
  
     res.status(200).json({
         status: "success",
@@ -20,7 +21,9 @@ exports.createGoal = catchAsync(async(req, res, next) => {
 
 exports.viewAllGoals = catchAsync(async (req, res, next) => {
 
-    const goal = await Goal.findAll({})
+    const goal = await Goal.findAll({where:{userId: req.user.id}})
+
+    if(!goal)return next(new Error('Document does not exist'))
 
     res.status(200).json({
         status: "success",
