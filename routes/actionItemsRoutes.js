@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const actionItemsController = require('../controllers/actionItemsController');
-
+const authController = require("../controllers/authController")
+router
+.route("/")
+.get(authController.checkUser,actionItemsController.viewActionItems)
+.post(authController.checkUser,actionItemsController.createActionItem)
 router
    .route("/:id")
-   .get(actionItemsController.viewActionItems)
-   .post(actionItemsController.createActionItem)
+   
    .patch(actionItemsController.updateActionItem)
    .delete(actionItemsController.deleteActionItem)
 

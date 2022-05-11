@@ -3,10 +3,12 @@ const ActionItem = require("../models/actionItemsModel")
 
 exports.createActionItem = catchAsync(async (req, res, next) => {
     req.body.userId = req.user.id;
+      
+
     const actionItem = await ActionItem.create(req.body);
 
 
-    if (!actionItem) return next(new Error("Document does not exist"));
+     if (!actionItem) return next(new Error("Document does not exist"));
 
     res.status(200).json({
         status: "success",
