@@ -1,11 +1,11 @@
 const catchAsync  = require('../utils/catchAsync');
-const ChatGroup = require('../models/chatGroupModel')
-
+const ChatGroup = require('../models/chatGroupModel');
+const Chat = require('../models/chatModel');
 
 exports.viewChatGroups = catchAsync(async(req,res,next)=> {
     console.log(req.user.disciplineId)
      
-    const chatGroups = await ChatGroup.findAll({where: {disciplineId: req.params.id}});
+    const chatGroups = await ChatGroup.findAll({where: {disciplineId: req.params.id},});
     
     
     if(!chatGroups){
@@ -51,10 +51,8 @@ exports.viewChatGroup = catchAsync(async(req,res,next)=> {
 });
 
 exports.updateChatGroup = catchAsync(async(req,res,next)=> {
-  
-   
-  const chatGroup = await ChatGroup.update({where: {id: req.params.id}});
-  
+   const body = req.body;
+  const chatGroup = await ChatGroup.update( body, {where: {id: req.params.id}});
   
   if(!chatGroup){
       return next(new Error('Oops!something went wrong.'))
@@ -71,7 +69,8 @@ exports.updateChatGroup = catchAsync(async(req,res,next)=> {
 exports.deleteChatGroup = catchAsync(async(req,res,next)=> {
   
    
-  const chatGroup = await ChatGroup.delete({where: {id: req.params.id}});
+  const chats = await Chat.destroy({where: {chatGroupId: req.params.id}});
+  const chatGroup = await ChatGroup.destroy({where: {id: req.params.id}});
   
   
   if(!chatGroup){
