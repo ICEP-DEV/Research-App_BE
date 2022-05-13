@@ -17,9 +17,21 @@ exports.getAllUsers = catchAsync( async(req, res, next) =>{
        return next(new Error('Users not found!'))
    }
    else
-
-    
     return res.send(users);
+})
+
+exports.getAllUsersWhere = catchAsync( async(req, res, next)=>
+{
+    const users = await User.findAll({ where: {references : req.params.id}})
+    console.log(req.user);
+    if(!users)
+    {
+        return next(new Error('Document not found'));
+    } 
+    else
+    {
+        return res.send(users);
+    }
 })
 
 exports.getUser = catchAsync( async(req, res, next) =>{

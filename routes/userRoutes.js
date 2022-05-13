@@ -18,7 +18,7 @@ router.route('/confirmEmail/:token').get(authController.confirmEmail)
 router.route('/resetPassword/:email').get(authController.resetPassword)
 router.route('/getAllUsers').get(authController.checkUser,authController.restrict(1), userController.getAllUsers)
 router.route('/getUser').get(authController.checkUser, userController.getUser)
-
+router.route('/getAllUsersWhere/:id').get(authController.checkUser, userController.getAllUsersWhere);
 
 
 
