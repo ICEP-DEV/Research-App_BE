@@ -6,7 +6,9 @@ const jwt = require("jsonwebtoken")
 const messagebird = require('messagebird')
 const { getMaxListeners } = require('../app');
 const { token } = require('morgan');
-const cloudinary = require('../config/cloudinary')
+const cloudinary = require('../config/cloudinary');
+const Projects = require('../models/projectModel');
+const sequelize = require('../config/db');
 
 
 
@@ -22,8 +24,23 @@ exports.getAllUsers = catchAsync( async(req, res, next) =>{
 
 exports.getAllUsersWhere = catchAsync( async(req, res, next)=>
 {
-    const users = await User.findAll({ where: {references : req.params.id}})
+    const users = await Projects.findAll({ 
+        where: {supervisorId : req.params.id},
+        attributes:{
+            exclude:["updatedAt", "createdAt",]
+        },
+        include: [
+            {
+                model: User,
+                attributes:{
+                    exclude: ["updatedAt", "createdAt", "password"]
+                }
+            }
+        ]
+    
+    })
     console.log(req.user);
+
     if(!users)
     {
         return next(new Error('Document not found'));

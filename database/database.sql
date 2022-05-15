@@ -20,11 +20,11 @@ SET time_zone = "+00:00";
 --
 -- Database: `researcherdna`
 --
-DROP DATABASE IF EXISTS researcherdna;
+DROP DATABASE IF EXISTS researcherd_na;
 
-CREATE DATABASE researcherdna;
+CREATE DATABASE researcherd_na;
 
-USE researcherdna;
+USE researcherd_na;
 
 DELIMITER $$
 --
