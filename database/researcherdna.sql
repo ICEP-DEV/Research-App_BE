@@ -7,11 +7,11 @@
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
-DROP DATABASE IF EXISTS researcherd_na;
+DROP DATABASE IF EXISTS researcherdna;
 
-CREATE DATABASE researcherd_na;
+CREATE DATABASE researcherdna;
 
-USE researcherd_na;
+USE researcherdna;
 
 
 
