@@ -7,6 +7,14 @@
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
+DROP DATABASE IF EXISTS researcherd_na;
+
+CREATE DATABASE researcherd_na;
+
+USE researcherd_na;
+
+
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
