@@ -44,15 +44,12 @@ exports.viewChats = catchAsync(async (req, res, next) => {
 });
 
 
-exports.supervisorChat = catchAsync(async (req, res, next) => {
+exports.sendMessage = catchAsync(async(req,res,next) =>{
+   req.body.userId = req.user.id;
+   const body = req.body
+   
 
-
-
-    const chat = await Chat.create(req.body, {
-        where: {
-            userId: req.user.id
-        }
-    })
+    const chat = await Chat.create(body)
 
     res.status(200).json({
         status: "success",
