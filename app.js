@@ -24,6 +24,7 @@ const chatRoutes = require('./routes/chatRoutes');
 const chatGroupRoutes = require('./routes/chatGroupRoutes');
 const actionItemsRoutes = require('./routes/actionItemsRoutes');
 const goalRoutes = require('./routes/goalRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes')
 
 
 
@@ -56,6 +57,7 @@ app.use('/api/v1/chats', chatRoutes);
 app.use('/api/v1/chat_groups', chatGroupRoutes);
 app.use('/api/v1/actionItems', actionItemsRoutes);
 app.use('/api/v1/goal',goalRoutes);
+app.use('api/v1/feedback', feedbackRoutes)
 
 app.use(globalErrHandler)
 //4 SERVER
