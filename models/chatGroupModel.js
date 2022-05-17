@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../config/db');
-const Discipline = require('./disciplineModel')
-const User = require('./userModel')
+const Discipline = require('./disciplineModel');
+const User = require('./userModel');
 
 
 const ChatGroup = sequelize.define('chatGroup', {

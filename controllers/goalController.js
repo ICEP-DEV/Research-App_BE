@@ -14,7 +14,6 @@ exports.createGoal = catchAsync(async(req, res, next) => {
         status: "success",
         message: "Goal successfully created",
         goal
-
     })
 
 })

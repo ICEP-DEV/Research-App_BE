@@ -3,17 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2022 at 10:55 AM
+-- Generation Time: May 17, 2022 at 11:50 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
-
-DROP DATABASE IF EXISTS researcherdna;
-
-CREATE DATABASE researcherdna;
-
-USE researcherdna;
-
-
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,6 +20,13 @@ SET time_zone = "+00:00";
 --
 -- Database: `researcherdna`
 --
+DROP DATABASE IF EXISTS researcherdna;
+
+CREATE DATABASE researcherdna;
+
+USE researcherdna;
+
+
 
 DELIMITER $$
 --
@@ -65,6 +64,31 @@ CREATE TABLE `action_items` (
 
 INSERT INTO `action_items` (`id`, `dueDate`, `title`, `text`, `projectStatusId`, `goalId`, `userId`, `createdAt`, `updatedAt`) VALUES
 (1, '2022-04-23 20:10:03', 'Learn Harvard referencing Guide', '- Look for books that teach harvard guide\r\n- Study the books that teach about harvard guide.\r\n- Practive harvard guide', 1, 1, 2, '2022-04-28 14:09:46', '2022-04-28 14:09:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appointment`
+--
+
+CREATE TABLE `appointment` (
+  `id` int(10) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `createAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `endDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `details` text NOT NULL,
+  `approved` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'The purpose of this is to check if the supervisor has accepted the appointment or not',
+  `type` int(11) NOT NULL,
+  `updatedAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `projectId` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`id`, `title`, `createAt`, `endDate`, `details`, `approved`, `type`, `updatedAt`, `projectId`) VALUES
+(1, 'Appointment : Interview about conducting surveys', '2022-05-18 09:45:03', '2022-05-18 10:45:03', 'I would like to create an appointment to meet with you regarding - the procedure of cunducting surveys - I have see how a lot of people conduct Surveys but I want to have a one to one session where I can have you walk me through your initial experiences in conducting surveys', 0, 1, '2022-05-17 09:48:07', 17);
 
 -- --------------------------------------------------------
 
@@ -352,8 +376,7 @@ CREATE TABLE `notes` (
 --
 
 INSERT INTO `notes` (`id`, `createdAt`, `text`, `guidelineId`, `projectId`, `title`, `updatedAt`, `wordCount`, `collaboratorId`, `userId`) VALUES
-(5, '2022-05-04 14:19:35', 'alsjdfljdfjs', NULL, 1, 'Testing NOtes', '2022-05-04 14:19:35', 0, NULL, 1),
-(6, '2022-05-11 10:17:01', 'gjhgg', NULL, 1, 'hjhjj', '2022-05-11 10:17:01', 0, NULL, 1);
+(5, '2022-05-04 14:19:35', 'alsjdfljdfjs', NULL, 1, 'Testing NOtes', '2022-05-04 14:19:35', 0, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -541,6 +564,13 @@ ALTER TABLE `action_items`
   ADD KEY `action_item_fk_status_project_status` (`projectStatusId`);
 
 --
+-- Indexes for table `appointment`
+--
+ALTER TABLE `appointment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_projectId_projects_appointment` (`projectId`);
+
+--
 -- Indexes for table `blogs`
 --
 ALTER TABLE `blogs`
@@ -680,6 +710,12 @@ ALTER TABLE `action_items`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID uniquely describes an action item and sets it apart from every other action item', AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `appointment`
+--
+ALTER TABLE `appointment`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `blogs`
 --
 ALTER TABLE `blogs`
@@ -786,6 +822,12 @@ ALTER TABLE `action_items`
   ADD CONSTRAINT `action_item_fk_status_project_status` FOREIGN KEY (`projectStatusId`) REFERENCES `project_statuses` (`id`),
   ADD CONSTRAINT `constraint_fk_action_item_creator` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `constraint_fk_action_item_goal_id` FOREIGN KEY (`goalId`) REFERENCES `goals` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `appointment`
+--
+ALTER TABLE `appointment`
+  ADD CONSTRAINT `fk_projectId_projects_appointment` FOREIGN KEY (`projectId`) REFERENCES `projects` (`id`);
 
 --
 -- Constraints for table `blogs`
