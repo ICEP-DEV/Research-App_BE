@@ -9,6 +9,7 @@ const { token } = require('morgan');
 const cloudinary = require('../config/cloudinary');
 const Projects = require('../models/projectModel');
 const sequelize = require('../config/db');
+const multer = require("multer");
 
 
 
@@ -77,7 +78,7 @@ exports.getUser = catchAsync( async(req, res, next) =>{
 
 exports.updateProfile = catchAsync(async (req, res, next) => {
     
-//    const { password, confirmPassword, firstName, lastName } = req.body;
+
     console.log(req.user.id)
    const user = await User.update(req.body,{ where: { id: req.user.id } });
 
@@ -87,4 +88,42 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
     })
 })
 
-module.exports
+exports.uploadProfileImage = catchAsync( async(req, res, next) =>{
+ 
+    
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "./public");
+    },
+    filename: function (req, file, cb) {
+      console.log(file);
+      
+      const ext = file.originalname.split(".").slice(-1)[0];
+  
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(null, file.fieldname + "-" + uniqueSuffix + "." + ext);
+    },
+  });
+  
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype.includes("image")) {
+      cb(null, true);
+    } else {
+      cb(new Error("File must be an image"), false);
+    }
+  };
+  
+  const upload = multer({ storage: storage, fileFilter: fileFilter });
+
+
+
+  exports.uploadImage = upload.single('photo');
+  req.body.photo = storage.filename;
+  const user = await User.patch(req.body,{where: {id: req.user.id}})
+
+    res.status(200).json({
+      status: "success",
+    });
+
+    
+})
