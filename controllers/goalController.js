@@ -31,6 +31,19 @@ exports.viewAllGoals = catchAsync(async (req, res, next) => {
     })
 })
 
+exports.viewAllGoalsWhere = catchAsync(async (req, res, next) => {
+
+    const goal = await Goal.findAll({where:{userId: req.user.id} && {projectId:req.params.id }})
+
+    if(!goal)return next(new Error('Document does not exist'))
+
+    res.status(200).json({
+        status: "success",
+        message: "Welcome to goal endpoint😎",
+        goal
+    })
+})
+
 exports.viewGoals = catchAsync(async (req, res, next) => {
 
     const goal = await Goal.findAll({where: {id: req.params.id} })

@@ -11,8 +11,11 @@ router
 router 
    .route("/:id")
    .get(authController.checkUser,goalController.viewGoals)
-   .patch(authController.checkUser,goalController.updateGoal)
+   .patch(authController.checkUser,goalController.updateGoal);
 
+router
+   .route("/whereprojectId/:id")
+   .get(authController.checkUser,goalController.viewAllGoalsWhere);
 
 
 
