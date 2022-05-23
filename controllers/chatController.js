@@ -3,6 +3,7 @@ const Chat = require('../models/chatModel');
 const sequelize = require('../config/db');
 const User = require('../models/userModel');
 const ChatGroup = require('../models/chatGroupModel');
+const multer = require('multer')
 
 
 
@@ -45,10 +46,14 @@ exports.viewChats = catchAsync(async (req, res, next) => {
 
 
 exports.sendMessage = catchAsync(async(req,res,next) =>{
-   req.body.userId = req.user.id;
+    req.body.userId = req.user.id;
    const body = req.body
-   
-
+//    console.log()
+if(req.route.path == '/uploadDocument'){
+    req.body.text = req.file.filename;
+    
+}
+    
     const chat = await Chat.create(body)
 
     res.status(200).json({
@@ -57,6 +62,47 @@ exports.sendMessage = catchAsync(async(req,res,next) =>{
         chat
     })
 })
+
+const fileStorage = multer.diskStorage({
+    destination: (file,req,cb) =>{
+        
+        
+        
+            
+         
+        cb(null,'./public/documents')  
+    },
+    filename: (req, file, cb) =>{
+        cb(null, file.originalname)
+        console.log(file)
+        
+        req.file = file;
+    }
+    })
+    
+
+const fileFilter = (req, file, cb) => {
+
+
+        if (file.mimetype.includes("document")) {
+            cb(null, true);
+        } else {
+
+            cb(new Error("File must be a document"), false);
+        }
+
+    
+
+
+};
+
+const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
+
+
+
+exports.uploadDocument =  upload.single('document')
+
+
 
 
 exports.getChatsWhere = catchAsync(async (req, res, next) => {

@@ -11,6 +11,8 @@ const Projects = require('../models/projectModel');
 const sequelize = require('../config/db');
 const multer = require("multer");
 
+const Chat = require('../models/chatModel');
+
 
 
 exports.getAllUsers = catchAsync( async(req, res, next) =>{
@@ -88,42 +90,61 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
     })
 })
 
-exports.uploadProfileImage = catchAsync( async(req, res, next) =>{
- 
-    
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "./public");
+const fileStorage = multer.diskStorage({
+    destination: (file,req,cb) =>{
+        
+        
+        
+            
+         
+        cb(null,'./public/images')  
     },
-    filename: function (req, file, cb) {
-      console.log(file);
-      
-      const ext = file.originalname.split(".").slice(-1)[0];
-  
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      cb(null, file.fieldname + "-" + uniqueSuffix + "." + ext);
-    },
-  });
-  
-  const fileFilter = (req, file, cb) => {
-    if (file.mimetype.includes("image")) {
-      cb(null, true);
-    } else {
-      cb(new Error("File must be an image"), false);
+    filename: (req, file, cb) =>{
+        cb(null, file.originalname)
+        console.log(file)
+        
+        req.file = file;
     }
-  };
+    })
+    
+
+const fileFilter = (req, file, cb) => {
+
+
+        if (file.mimetype.includes("image")) {
+            cb(null, true);
+        } else {
+
+            cb(new Error("File must be an image"), false);
+        }
+
+    
+
+
+};
+
+const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
+
+exports.uploadProfileImage = upload.single('photo')
+
+//exports.uploadDocument =  upload.single('document')
+    
+
+    
+   
   
-  const upload = multer({ storage: storage, fileFilter: fileFilter });
+  exports.updateUser =  async(req, res, next) => { 
 
+    req.body.userId = req.user.id;
+    req.body.photo = req.file.filename;
 
-
-  exports.uploadImage = upload.single('photo');
-  req.body.photo = storage.filename;
-  const user = await User.patch(req.body,{where: {id: req.user.id}})
+    const user = await User.update(req.body,{ where: { id: req.user.id } });
 
     res.status(200).json({
-      status: "success",
-    });
+        status: "success",
+        message: "Profile picture successfully uploaded"
+        
+      });
 
-    
-})
+}
+

@@ -25,7 +25,7 @@ const chatGroupRoutes = require('./routes/chatGroupRoutes');
 const actionItemsRoutes = require('./routes/actionItemsRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes')
-const pictureUploadRoutes = require('./routes/pictureUploadRoutes')
+
 
 
 
@@ -59,7 +59,7 @@ app.use('/api/v1/chat_groups', chatGroupRoutes);
 app.use('/api/v1/actionItems', actionItemsRoutes);
 app.use('/api/v1/goal',goalRoutes);
 app.use('api/v1/feedback', feedbackRoutes)
-app.use('api/v1/upload',pictureUploadRoutes)
+
 
 app.use(globalErrHandler)
 //4 SERVER
