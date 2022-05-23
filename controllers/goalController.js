@@ -1,6 +1,7 @@
 
 const catchAsync  = require('../utils/catchAsync');
 const Goal = require('../models/goalModel');
+const ProjectStatus = require('../models/projectStatusModel');
 
 exports.createGoal = catchAsync(async(req, res, next) => {
     req.body.userId = req.user.id;
@@ -33,7 +34,12 @@ exports.viewAllGoals = catchAsync(async (req, res, next) => {
 
 exports.viewAllGoalsWhere = catchAsync(async (req, res, next) => {
 
-    const goal = await Goal.findAll({where:{userId: req.user.id} && {projectId:req.params.id }})
+    const goal = await Goal.findAll({where:{userId: req.user.id} && {projectId:req.params.id },
+    include:[
+        {
+            model:ProjectStatus
+        }
+    ]})
 
     if(!goal)return next(new Error('Document does not exist'))
 
