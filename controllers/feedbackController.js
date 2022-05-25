@@ -3,6 +3,7 @@ const Feedback = require("../models/feedBackModel");
 
 exports.sendFeedback = catchAsync(async(req,res,next) =>{
  req.body.userId = req.user.id
+ 
 
  const feedback = await Feedback.create(req.body)
 

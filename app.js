@@ -58,7 +58,7 @@ app.use('/api/v1/chats', chatRoutes);
 app.use('/api/v1/chat_groups', chatGroupRoutes);
 app.use('/api/v1/actionItems', actionItemsRoutes);
 app.use('/api/v1/goal',goalRoutes);
-app.use('api/v1/feedback', feedbackRoutes)
+app.use('/api/v1/feedback', feedbackRoutes)
 
 
 app.use(globalErrHandler)

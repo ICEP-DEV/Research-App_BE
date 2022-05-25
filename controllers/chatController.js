@@ -90,10 +90,6 @@ const fileFilter = (req, file, cb) => {
 
             cb(new Error("File must be a document"), false);
         }
-
-    
-
-
 };
 
 const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
