@@ -2,7 +2,7 @@ const guidelineController = require("../controllers/guidelinesController");
 const router = require("express").Router();
 
 router.use(guidelineController.setIDs)
-router
+router  
   .route("/")
   .get(guidelineController.getAllGuidelines)
   .post(guidelineController.createGuideline);

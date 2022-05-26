@@ -3,6 +3,8 @@ const catchAsync  = require('../utils/catchAsync')
 const sequelize = require('../config/db');
 const ProjectType = require("../models/projectTypeModel");
 const Discipline = require("../models/disciplineModel");
+const LinksModel = require("../models/linksModel");
+const SubGuides = require("../models/subguidesModel");
 
 
 exports.setIDs = (req,res,next)=>{
@@ -11,6 +13,7 @@ exports.setIDs = (req,res,next)=>{
     next();
 }
 exports.createGuideline = catchAsync(async(req,res,next)=> {
+
 
     const guideline =  await Guideline.create(req.body);
     
@@ -89,9 +92,11 @@ exports.updateGuideline = async(req, res, next) =>{
 }
 
 
-exports.deleteGuideline = async(req, res, next) =>{
+exports.deleteGuideline = catchAsync(async(req, res, next) =>{
 
     // const projects=0;
+    const links = await LinksModel.destroy({ where: {guidelineId: req.params.id}});
+    const subGuides = await SubGuides.destroy({ where: {guidelineId: req.params.id}})
     const guideline = await Guideline.destroy(
         {
         where: {id : req.params.id}
@@ -103,4 +108,4 @@ exports.deleteGuideline = async(req, res, next) =>{
         status: "success",
         guideline
     })
-}
+});
