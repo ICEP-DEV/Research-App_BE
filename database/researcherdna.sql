@@ -41,7 +41,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `guidelinesUnder` (IN `projectType` 
 
 DELIMITER ;
 
--- --------------------------------------------------------
+----------------------------------------------------------
 
 --
 -- Table structure for table `action_items`

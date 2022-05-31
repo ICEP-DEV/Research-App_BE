@@ -66,16 +66,11 @@ exports.viewGoals = catchAsync(async (req, res, next) => {
 })
 
 exports.updateGoal = catchAsync(async (req, res, next) => {
-
-    const goal = await Goal.patch(req.body, {where: {id: req.params.id}})
-
+    const goal = await Goal.update(req.body, {where: {id: req.params.id}})
     if(!goal) return next(new Error('Document does not exist'));
-
     res.status(200).json({
         status: "success",
         message: "goal successfully updated",
         goal
     })
-
-
 })
