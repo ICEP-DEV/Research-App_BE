@@ -228,7 +228,7 @@ CREATE TABLE `events` (
   `description` text NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `userId` int(10) NOT NULL,
-  `createAt` timestamp NOT NULL DEFAULT current_timestamp()
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
