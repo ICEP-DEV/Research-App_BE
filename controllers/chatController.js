@@ -48,6 +48,7 @@ exports.viewChats = catchAsync(async (req, res, next) => {
 exports.sendMessage = catchAsync(async(req,res,next) =>{
     req.body.userId = req.user.id;
    const body = req.body
+   req.body.chatGroupId = req.params.id;
 //    console.log()
 if(req.route.path == '/uploadDocument'){
     req.body.text = req.file.filename;

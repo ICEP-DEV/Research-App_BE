@@ -3,7 +3,7 @@ const chatController = require("../controllers/chatController");
 const chatGroupController = require("../controllers/chatGroupController");
 const authController = require('../controllers/authController')
 
-router.route("/uploadDocument").post(authController.checkUser,chatController.uploadDocument,chatController.sendMessage);
+router.route("/uploadDocument/:id").post(authController.checkUser,chatController.uploadDocument,chatController.sendMessage);
 router
    .route("/:id")
    .get(authController.checkUser, chatController.viewChats)
