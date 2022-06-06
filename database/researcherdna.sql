@@ -41,7 +41,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `guidelinesUnder` (IN `projectType` 
 
 DELIMITER ;
 
-----------------------------------------------------------
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `action_items`
@@ -227,8 +227,8 @@ CREATE TABLE `events` (
   `event_name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `updatedAt` timestamp NOT NULL DEFAULT current_timestamp(),
-  `created_by` int(10) NOT NULL,
-  `createAt` timestamp NOT NULL DEFAULT current_timestamp()
+  `userId` int(10) NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -648,7 +648,7 @@ ALTER TABLE `disciplines`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_created_by_users_event` (`created_by`);
+  ADD KEY `fk_created_by_users_event` (`userId`);
 
 --
 -- Indexes for table `event_attendees`
@@ -943,7 +943,7 @@ ALTER TABLE `disciplines`
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
-  ADD CONSTRAINT `fk_created_by_users_event` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `fk_created_by_users_event` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `event_attendees`
