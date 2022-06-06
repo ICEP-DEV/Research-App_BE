@@ -47,9 +47,10 @@ exports.viewChats = catchAsync(async (req, res, next) => {
 
 exports.sendMessage = catchAsync(async(req,res,next) =>{
     req.body.userId = req.user.id;
+    req.body.chatGroupId = req.params.id
    const body = req.body
-//    console.log()
-if(req.route.path == '/uploadDocument'){
+   // console.log(req.route.path)
+if(req.route.path == "/uploadDocument/:id"){
     req.body.text = req.file.filename;
     
 }
@@ -73,9 +74,14 @@ const fileStorage = multer.diskStorage({
         cb(null,'./public/documents')  
     },
     filename: (req, file, cb) =>{
-        cb(null, file.originalname)
+      
         console.log(file)
         
+        
+        const uniqueSuffix = Date.now() ;
+        cb(null, file.originalname + "-" + uniqueSuffix  );
+
+
         req.file = file;
     }
     })
