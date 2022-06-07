@@ -12,4 +12,9 @@ router
   .patch(commentController.updateComment)
   .delete(commentController.deleteComment);
 
+router
+  .route("/blogId/:blogId")
+  .get(commentController.getAllCommentsWhere);
+
+
 module.exports = router;

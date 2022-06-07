@@ -36,6 +36,29 @@ exports.getAllComments = async(req,res,next)=> {
     })
 }
 
+exports.getAllCommentsWhere = async(req,res,next)=> {
+    const comments = await Comment.findAll({
+        where:{blogId: req.params.blogId},
+        include:[
+            {
+                model: User,
+                attributes: { exclude: ["updatedAt", "createdAt", "password"] },
+            },
+            {
+                model: Blog,
+                attributes: { exclude: ["updatedAt", "createdAt"] },
+            }
+        ]
+    });
+
+    res.status(200).json({
+        status: "success",
+        message: "Hello from get all Comment route 😜",
+        results: comments.length,
+        comments
+    })
+}
+
 exports.getComment = async(req, res, next) =>{
     
     const comment = await Comment.findOne({
