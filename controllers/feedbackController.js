@@ -30,3 +30,10 @@ exports.getFeedback = catchAsync(async(req,res, next) =>{
         feedback
     })
 })
+
+exports.getAllFeedbackNotifications = catchAsync(async(req, res, next)=>{
+    // const line =
+})
+
+//We need to be able to count the total number of notifications from each goal - 
+//Firstly select a goal

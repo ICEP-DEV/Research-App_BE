@@ -55,6 +55,27 @@ exports.viewAllGoalsWhere = catchAsync(async (req, res, next) => {
     })
 })
 
+exports.viewAllGoalsWhereStudentIsOwner = catchAsync(async (req, res, next) => {
+
+    const goal = await Goal.findAll({where:{userId: req.user.id} && {projectId:req.params.id },
+    include:[
+        { model:ProjectStatus },
+        { model:Feedback},
+        { model:User, attribues: {
+            exclude: ["createdAt","disciplineId", "email", "firstName", "id", "idNumber", "lastName", "password", "photo", "references", "title", "updatedAt", "verified"]
+        }},
+
+    ]})
+
+    if(!goal)return next(new Error('Document does not exist'))
+
+    res.status(200).json({
+        status: "success",
+        message: "Welcome to goal endpoint😎",
+        goal
+    })
+})
+
 exports.viewGoals = catchAsync(async (req, res, next) => {
 
     const goal = await Goal.findAll({where: {id: req.params.id} })
