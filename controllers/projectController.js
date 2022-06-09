@@ -69,6 +69,31 @@ exports.getProject = async (req, res, next) => {
   });
 };
 
+
+exports.getUserProjects = async (req, res, next) => {
+  const projects = await Project.findAll({
+    where: { userId: req.params.id },
+    include: [
+      {
+        model: ProjectStatus,
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      },
+      {
+        model: ProjectType,
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+      },
+    ]
+  });
+
+  if (!projects) return next(new Error("Document GetUserProjects does not exist"));
+
+  res.status(200).json({
+    status: "success",
+    projects,
+  });
+};
+
+
 exports.updateProject = async (req, res, next) => {
   const { body } = req;
 

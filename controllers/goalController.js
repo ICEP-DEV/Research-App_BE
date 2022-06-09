@@ -3,6 +3,7 @@ const catchAsync  = require('../utils/catchAsync');
 const Goal = require('../models/goalModel');
 const ProjectStatus = require('../models/projectStatusModel');
 const Feedback = require('../models/feedBackModel');
+const User = require('../models/userModel');
 
 exports.createGoal = catchAsync(async(req, res, next) => {
     req.body.userId = req.user.id;
@@ -38,7 +39,10 @@ exports.viewAllGoalsWhere = catchAsync(async (req, res, next) => {
     const goal = await Goal.findAll({where:{userId: req.user.id} && {projectId:req.params.id },
     include:[
         { model:ProjectStatus },
-        { model:Feedback}
+        { model:Feedback},
+        { model:User, attribues: {
+            exclude: ["createdAt","disciplineId", "email", "firstName", "id", "idNumber", "lastName", "password", "photo", "references", "title", "updatedAt", "verified"]
+        }},
 
     ]})
 
