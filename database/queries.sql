@@ -65,4 +65,55 @@ GROUP BY `projects`.`id`, `goals`.`id`, `project_statuses`.`status`
 -- Update the status of every feedback that is opened that has not been read - update the status to opened.
 UPDATE `feedbacks` SET `projectStatusId` = 5
 WHERE `feedbacks`.`id` = 15
+-- Get a notifications for a specific goal ID
+SELECT `project_statuses`.`status`, COUNT(`feedbacks`.`id`) `Total Feedbacks`,  `goals`.`id` as `Goal ID` , `projects`.`id` AS `Project ID`
+FROM `projects`, `goals`, `feedbacks`, `project_statuses`
+WHERE `projects`.`supervisorId` = 3
+  AND `projects`.`id` = `goals`.`projectId`
+  AND `goals`.`id` = `feedbacks`.`goalId`
+  AND `project_statuses`.`id` = `feedbacks`.`projectStatusId`
+  AND `feedbacks`.`projectStatusId` = 13
+  AND `projects`.`id` = 26
+GROUP BY `projects`.`id`, `goals`.`id`, `project_statuses`.`status`
+-- Now we need to count all the feedbacks for a given goal : To do this I am going to remove the goalID so that I only have the project and thus count everything inside a project.
+SELECT `goals`.`id`, `project_statuses`.`status`, COUNT(`feedbacks`.`id`) `Total Feedbacks`, `projects`.`id` AS `Project ID`
+FROM `projects`, `goals`, `feedbacks`, `project_statuses`
+WHERE `projects`.`supervisorId` = 3
+  AND `projects`.`id` = `goals`.`projectId`
+  AND `goals`.`id` = `feedbacks`.`goalId`
+  AND `project_statuses`.`id` = `feedbacks`.`projectStatusId`
+  AND `feedbacks`.`projectStatusId` = 13
+GROUP BY `projects`.`id`, `project_statuses`.`status`,`goals`.`id`
+    -- With this information in mind we can begin to count the total number of feedbacks from any given project.
+    SELECT `project_statuses`.`status`, COUNT(`feedbacks`.`id`) `Total Feedbacks`, `projects`.`id` AS `Project ID`
+    FROM `projects`, `goals`, `feedbacks`, `project_statuses`
+    WHERE `projects`.`supervisorId` = 3
+      AND `projects`.`id` = `goals`.`projectId`
+      AND `goals`.`id` = `feedbacks`.`goalId`
+      AND `project_statuses`.`id` = `feedbacks`.`projectStatusId`
+      AND `feedbacks`.`projectStatusId` = 13
+      AND `projects`.`id` = 26
+    GROUP BY `projects`.`id`, `project_statuses`.`status`
 
+
+---=========================================================---
+--- THE GOAL FOR NOW IS TO COUNT FEEDBACKS FOR A GIVEN GOAL ---
+---=========================================================---
+SELECT `goals`.`id`, `project_statuses`.`status`, COUNT(`feedbacks`.`id`) `Total Feedbacks`, `projects`.`id` AS `Project ID`
+FROM `projects`, `goals`, `feedbacks`, `project_statuses`
+WHERE `projects`.`id` = `goals`.`projectId`
+  AND `goals`.`id` = `feedbacks`.`goalId`
+  AND `project_statuses`.`id` = `feedbacks`.`projectStatusId`
+  AND `feedbacks`.`projectStatusId` = 13
+  AND `goals`.`id` = 15
+GROUP BY `projects`.`id`, `project_statuses`.`status`,`goals`.`id`
+--Now we need to count where the userId (or the sender) is not mine
+SELECT `goals`.`id`, `project_statuses`.`status`, COUNT(`feedbacks`.`id`) `Total Feedbacks`, `projects`.`id` AS `Project ID`
+FROM `projects`, `goals`, `feedbacks`, `project_statuses`
+WHERE `projects`.`id` = `goals`.`projectId`
+  AND `goals`.`id` = `feedbacks`.`goalId`
+  AND `project_statuses`.`id` = `feedbacks`.`projectStatusId`
+  AND `feedbacks`.`projectStatusId` = 13
+  AND `goals`.`id` = 15
+  AND `feedbacks`.`userId` <> 3
+GROUP BY `projects`.`id`, `project_statuses`.`status`,`goals`.`id`
