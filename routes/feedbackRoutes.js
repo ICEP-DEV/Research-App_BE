@@ -15,5 +15,14 @@ router
 
 router
   .route("/CountFeedbacksForAGivenGoal/:id")
-  .get(authController.checkUser,feedbackController.CountFeedbacksForAGivenGoal)
+  .get(authController.checkUser,feedbackController.CountFeedbacksForAGivenGoal);
+
+router
+  .route("/getAllSupervisorProjectNotifications/:id")
+  .get(authController.checkUser, feedbackController.getAllSupervisorProjectNotifications);
+
+router
+  .route("/supervisorGetAllStudentProjectNotifications/:id/:userId")
+  .get(authController.checkUser,feedbackController.supervisorGetAllStudentProjectNotifications);
+
 module.exports = router;
