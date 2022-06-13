@@ -60,7 +60,7 @@ exports.viewAllGoalsWhereStudentIsOwner = catchAsync(async (req, res, next) => {
     const goal = await Goal.findAll({where:{userId: req.user.id} && {projectId:req.params.id },
     include:[
         { model:ProjectStatus },
-        { model:Feedback},
+        { model:Feedback,  order: ['id', DESC]},
         { model:User, attribues: {
             exclude: ["createdAt","disciplineId", "email", "firstName", "id", "idNumber", "lastName", "password", "photo", "references", "title", "updatedAt", "verified"]
         }},

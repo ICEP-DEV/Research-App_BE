@@ -28,7 +28,7 @@ exports.updateFeedback = catchAsync(async(req, res, next)=>{
 
 exports.getFeedback = catchAsync(async(req,res, next) =>{
     
-    const feedback = await Feedback.findAll({where: {goalId: req.params.id}, order: ['id', DESC]})
+    const feedback = await Feedback.findAll({where: {goalId: req.params.id}, order: ['createdAt', ASC]})
     
     if(!feedback) return next(new Error("Document not found"))
     
