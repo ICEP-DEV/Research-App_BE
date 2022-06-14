@@ -100,9 +100,14 @@ const fileStorage = multer.diskStorage({
         cb(null,'./public/images')  
     },
     filename: (req, file, cb) =>{
-        cb(null, file.originalname)
+       // cb(null, file.originalname)
         console.log(file)
         
+        
+  
+        const uniqueSuffix = Date.now() ;
+        cb(null, file.originalname + "-" + uniqueSuffix  );
+
         req.file = file;
     }
     })
