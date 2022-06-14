@@ -8,7 +8,7 @@ const cors = require('cors');
 const app = express();
 
 //2 REQUIRE ROUTES
-const userRoutes = require('./routes/userRoutes')
+const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require("./routes/projectRoutes");
 const guidelineRoutes = require('./routes/guidelineRoutes');
 const disciplineRoutes = require('./routes/disciplineRoutes');
@@ -24,10 +24,11 @@ const chatRoutes = require('./routes/chatRoutes');
 const chatGroupRoutes = require('./routes/chatGroupRoutes');
 const actionItemsRoutes = require('./routes/actionItemsRoutes');
 const goalRoutes = require('./routes/goalRoutes');
-const feedbackRoutes = require('./routes/feedbackRoutes')
-const appointmentRoutes = require('./routes/appointmentsRoutes')
-const eventsRoutes = require('./routes/eventsRoutes')
-const eventAttendeeRoutes = require('./routes/eventAttendeeRoutes')
+const feedbackRoutes = require('./routes/feedbackRoutes');
+const appointmentRoutes = require('./routes/appointmentsRoutes');
+const eventsRoutes = require('./routes/eventsRoutes');
+const eventAttendeeRoutes = require('./routes/eventAttendeeRoutes');
+const gaolFileRoutes = require('./routes/goal_filesRoutes');
 
 
 
@@ -60,10 +61,11 @@ app.use('/api/v1/chats', chatRoutes);
 app.use('/api/v1/chat_groups', chatGroupRoutes);
 app.use('/api/v1/actionItems', actionItemsRoutes);
 app.use('/api/v1/goal',goalRoutes);
-app.use('/api/v1/feedback', feedbackRoutes)
-app.use('/api/v1/appointments',appointmentRoutes)
-app.use('/api/v1/events',eventsRoutes)
-app.use('/api/v1/eventAttendees',eventAttendeeRoutes)
+app.use('/api/v1/feedback', feedbackRoutes);
+app.use('/api/v1/appointments',appointmentRoutes);
+app.use('/api/v1/events',eventsRoutes);
+app.use('/api/v1/eventAttendees',eventAttendeeRoutes);
+app.use('/api/v1/goal_files', gaolFileRoutes);
 
 app.use(globalErrHandler)
 //4 SERVER
