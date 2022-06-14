@@ -12,4 +12,8 @@ router
   .patch(projectController.updateProject)
   .delete(projectController.deleteProject);
 
+router
+  .route("/userId/:id")
+  .get(projectController.getUserProjects);
+
 module.exports = router;
