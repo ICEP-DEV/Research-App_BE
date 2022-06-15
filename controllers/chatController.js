@@ -54,9 +54,7 @@ if(req.route.path == "/uploadDocument/:id"){
     req.body.text = req.file.filename;
     
 }
-    
     const chat = await Chat.create(body)
-
     res.status(200).json({
         status: "success",
         message: "message successfully sent.",
@@ -65,32 +63,26 @@ if(req.route.path == "/uploadDocument/:id"){
 })
 
 const fileStorage = multer.diskStorage({
-    destination: (file,req,cb) =>{
-        cb(null,'C:/Users/ICEP/Shiko/ResearcherDNA/Research-App_UI/src/assets/userfiles/documents')  
+    destination: (file,req,cb)=>{
+                //  C:\Users\Programmer\ResearchApp\Research-App_UI\src\assets\userfiles\documents
+        cb(null,'C:/Users/Programmer/ResearchApp/Research-App_UI/src/assets/userfiles/documents')  
     },
-    filename: (req, file, cb) =>{
-      
+    filename: (req, file, cb)=>{
         console.log(file)
-        
-        
         const uniqueSuffix = Date.now() ;
-        cb(null, uniqueSuffix + "-" + file.originalname    );
-
-
+        cb(null, uniqueSuffix + "-" + file.originalname);
         req.file = file;
-    }
+        }
     })
     
 
 const fileFilter = (req, file, cb) => {
-
-
-        if (file.mimetype.includes("document")) {
-            cb(null, true);
-        } else {
-
-            cb(new Error("File must be a document"), false);
-        }
+    if(file.mimetype.includes("document")){
+        cb(null, true);
+    } 
+    else{
+        cb(new Error("File must be a document"), false);
+    }
 };
 
 const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
