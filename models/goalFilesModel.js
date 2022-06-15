@@ -3,7 +3,7 @@ const sequelize = require('../config/db');
 const Goal = require('./goalModel')
 
 
-const GoalFIles = sequelize.define('goalFiles',{
+const GoalFiles = sequelize.define('goalFiles',{
 
     id:{
         type: Sequelize.INTEGER,
@@ -25,7 +25,7 @@ const GoalFIles = sequelize.define('goalFiles',{
     updatedAt: Sequelize.DATE
 })
 
-Goal.hasMany(GoalFIles, {onDelete: "RESTRICT",foreignKey:"goalId"})
-GoalFIles.belongsTo(Goal)
+Goal.hasMany(GoalFiles, {onDelete: "RESTRICT",foreignKey:"goalId"})
+GoalFiles.belongsTo(Goal)
 
-module.exports = GoalFIles;
+module.exports = GoalFiles;

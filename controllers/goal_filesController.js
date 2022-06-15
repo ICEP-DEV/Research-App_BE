@@ -18,9 +18,12 @@ exports.getGoalFile = catchAsync(async(req,res, next) =>{
 
 exports.uploadGoalFile = catchAsync(async(req,res,next) =>{
 
-req.body.file_name = req.file.filename
-req.body.goalId = req.params.goalId
+req.body.file_name = req.file.filename;
+//The goal that I have right now is to test if I can work on making sure that the goalId is not a string value but that it is rather a number
+let goalId = req.params.id;
+req.body.goalId = parseInt(goalId);
 
+console.log(req.body);
 const goalFile = await GoalFiles.create(req.body);
 
 if(!goalFile) return next(new Error("Oops! Something went wrong"));
