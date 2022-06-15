@@ -4,6 +4,7 @@ const Goal = require('../models/goalModel');
 const ProjectStatus = require('../models/projectStatusModel');
 const Feedback = require('../models/feedBackModel');
 const User = require('../models/userModel');
+const GoalFiles = require('../models/goalFilesModel')
 
 exports.createGoal = catchAsync(async(req, res, next) => {
     req.body.userId = req.user.id;
@@ -40,6 +41,7 @@ exports.viewAllGoalsWhere = catchAsync(async (req, res, next) => {
     include:[
         { model:ProjectStatus },
         { model:Feedback},
+        { model:GoalFiles},
         { model:User, attribues: {
             exclude: ["createdAt","disciplineId", "email", "firstName", "id", "idNumber", "lastName", "password", "photo", "references", "title", "updatedAt", "verified"]
         }},

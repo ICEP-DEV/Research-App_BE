@@ -3,7 +3,7 @@ const sequelize = require('../config/db');
 const Goal = require('./goalModel')
 
 
-const GoalFiles = sequelize.define('goalFiles',{
+const GoalFiles = sequelize.define('goal_files',{
 
     id:{
         type: Sequelize.INTEGER,
