@@ -18,20 +18,20 @@ exports.getGoalFile = catchAsync(async(req,res, next) =>{
 
 exports.uploadGoalFile = catchAsync(async(req,res,next) =>{
 
-req.body.file_name = req.file.filename;
-//The goal that I have right now is to test if I can work on making sure that the goalId is not a string value but that it is rather a number
-let goalId = req.params.id;
-req.body.goalId = parseInt(goalId);
+    req.body.file_name = req.file.filename;
+    //The goal that I have right now is to test if I can work on making sure that the goalId is not a string value but that it is rather a number
+    let goalId = req.params.id;
+    req.body.goalId = parseInt(goalId);
 
-console.log(req.body);
-const goalFile = await GoalFiles.create(req.body);
+    console.log(req.body);
+    const goalFile = await GoalFiles.create(req.body);
 
-if(!goalFile) return next(new Error("Oops! Something went wrong"));
+    if(!goalFile) return next(new Error("Oops! Something went wrong"));
 
-res.status(200).json({
+    res.status(200).json({
 
-    status: "succes",
-    message: "Goal file successfully uploaded.",
-    goalFile
-})
+        status: "succes",
+        message: "Goal file successfully uploaded.",
+        goalFile
+    })
 })

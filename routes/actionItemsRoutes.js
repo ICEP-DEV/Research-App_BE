@@ -7,7 +7,6 @@ router
 .post(authController.checkUser,actionItemsController.createActionItem)
 router
    .route("/:id")
-   
    .patch(actionItemsController.updateActionItem)
    .delete(actionItemsController.deleteActionItem)
 
