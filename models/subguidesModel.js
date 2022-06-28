@@ -20,7 +20,7 @@ const Subguide = sequelize.define('subguide', {
     updatedAt: Sequelize.DATE,
 })
 
-Guideline.hasOne(Subguide, {onDelete: 'RESTRICT',foreignKey: 'guidelineId'})
+Guideline.hasMany(Subguide, {onDelete: 'RESTRICT',foreignKey: 'guidelineId'})
 Subguide.belongsTo(Guideline)
 
 

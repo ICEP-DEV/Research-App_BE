@@ -5,6 +5,7 @@ const ProjectType = require("../models/projectTypeModel");
 const Discipline = require("../models/disciplineModel");
 const LinksModel = require("../models/linksModel");
 const SubGuides = require("../models/subguidesModel");
+const { convertToObject } = require("typescript");
 
 
 exports.setIDs = (req,res,next)=>{
@@ -65,7 +66,11 @@ exports.getAllGuidelines = async(req,res,next)=> {
 exports.getGuideline = async(req, res, next) =>{
     
     const guideline = await Guideline.findOne({
-        where: {id : req.params.id}
+        where: {id : req.params.id},
+        include:[
+            {model:SubGuides},
+            {model:LinksModel}
+        ]
     })
 
     if(!guideline) return next(new Error('Document does not exist'));
@@ -108,4 +113,27 @@ exports.deleteGuideline = catchAsync(async(req, res, next) =>{
         status: "success",
         guideline
     })
+});
+
+
+exports.getHtmlDetails = catchAsync(async(req, res, next)=>{
+    
+    const line = "SELECT CONCAT(CONCAT(`element_types`.`opening_tag`, \" id=\", `user_elements`.`elementId`, \" style=\",`user_elements`.`class`  , \"> \")," + "`user_elements`.`content` , `element_types`.`closing_tag`) AS userHTML , `user_elements`.`class`, CONCAT( \"id-\",`user_elements`.`id`) AS elementId, `user_elements`.`id` " +
+    "FROM `user_elements`, `element_types`, `guidelines`" +
+    " WHERE `user_elements`.`elementTypeId` = `element_types`.`id` AND `guidelines`.`id` = `user_elements`.`guidelineId` AND `user_elements`.`guidelineId`=" + req.params.id;
+
+
+    console.log(line);
+
+    const htmlDetails = await sequelize.query(line, {
+        nest:false,
+        type: sequelize.QueryTypes.SELECT
+    });
+    
+
+    res.status(200).json({
+        status: "success",
+        results: htmlDetails.length,
+        htmlDetails
+    });
 });

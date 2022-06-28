@@ -25,15 +25,7 @@ const Link = sequelize.define('link',{
 
 })
 
-Guidelines.hasOne(Link, {onDelete: 'RESTRICT',foreignKey:'guidelineId'})
+Guidelines.hasMany(Link, {onDelete: 'RESTRICT',foreignKey:'guidelineId'})
 Link.belongsTo(Guidelines)
-
-// const hello = async()=>{
-//     const logIt = await Link.findAll({});
-
-//     console.log(logIt)
-// }
-
-// hello()
 
 module.exports = Link;

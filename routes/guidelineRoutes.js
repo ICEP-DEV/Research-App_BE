@@ -13,4 +13,8 @@ router
   .patch(guidelineController.updateGuideline)
   .delete(guidelineController.deleteGuideline);
 
+router
+  .route("/userHtml/details/:id")
+  .get(guidelineController.getHtmlDetails);
+
 module.exports = router;

@@ -25,23 +25,5 @@ const Faculty = sequelize.define('faculty', {
 
 
 },{indexes: [{primaryKey: true, name: 'facultyId', fields: ['id']}]})
-//{indexes: [{unique: true, name: 'projectId', fields: ['projectId']}]})
 
 module.exports = Faculty;
-
-
-
-
-
-
-
-
-
-
-
-// CREATE TABLE `faculties`
-// (
-//     `facultyId` INT(3) PRIMARY KEY  AUTO_INCREMENT,
-//     `name` VARCHAR(50) NOT NULL,
-//     `description` VARCHAR(255)
-// );

@@ -2,11 +2,11 @@ const Sequelize = require('sequelize')
 
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(
-    'icepcjdm_researcherdna-test-db',
-     'icepcjdm_researcherdna-test-users',
-     'SSanyane@243', 
+    'researcherdna',
+     'root',
+     '', 
      {
-  host: '154.0.174.8',
+  host: 'localhost',
   dialect: 'mysql' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
 });
 
