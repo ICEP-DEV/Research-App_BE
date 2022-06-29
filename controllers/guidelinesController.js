@@ -5,7 +5,6 @@ const ProjectType = require("../models/projectTypeModel");
 const Discipline = require("../models/disciplineModel");
 const LinksModel = require("../models/linksModel");
 const SubGuides = require("../models/subguidesModel");
-const { convertToObject } = require("typescript");
 
 
 exports.setIDs = (req,res,next)=>{
