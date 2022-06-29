@@ -11,7 +11,7 @@ const sequelizeTransforms = require('sequelize-transforms');
 //   dialect: 'mysql' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
 // });
 
-const sequelize = new Sequelize("mysql://bd45a5e3aba82c:e481c7c24bcffa4@us-cdbr-east-05.cleardb.net/heroku_121f32d29f33894?reconnect=true") 
+const sequelize = new Sequelize("mysql://b752eb1a931ab8:f1dd06fb@us-cdbr-east-05.cleardb.net/heroku_53594401c782c36?reconnect=true") 
 
 
 // (async()=>{
