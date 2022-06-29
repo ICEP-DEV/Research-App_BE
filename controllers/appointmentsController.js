@@ -32,7 +32,7 @@ exports.createAppointment = catchAsync(async(req,res,next) =>{
 
 exports.updateAppointment = catchAsync(async(req, res, next) =>{
     
-    const appointment = await Appointment.update(req.body, {where : {projectId : req.params.id} })
+    const appointment = await Appointment.update(req.body, {where : {id : req.params.id}, order:['id','DESC']})
     if(!appointment) return next(new Error("Document does not exist"))
 
 

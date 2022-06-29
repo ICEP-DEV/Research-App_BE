@@ -18,7 +18,7 @@ const Appointment = sequelize.define('appointment',{
 
     
 
-    endAt:{
+    endDate:{
         type :Sequelize.DATE,
         
     },
