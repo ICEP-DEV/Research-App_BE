@@ -3,7 +3,7 @@
     "username": "b752eb1a931ab8",
     "password": "f1dd06fb",
     "database": "heroku_53594401c782c36",
-    "host": "3000",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
