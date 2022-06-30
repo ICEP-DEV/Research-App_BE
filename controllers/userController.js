@@ -134,7 +134,15 @@ exports.uploadProfileImage = upload.single('photo')
 
 //exports.uploadDocument =  upload.single('document')
     
-
+exports.makeUserAdmin = async(req, res, next)=>{
+    // req.body.userId = req.user.id
+    const line = `UPDATE \`users\` SET \`userType\` = '2' WHERE \`users\`.\`id\` = 1 AND \`users\`.\`idNumber\` = '9511275418082'`;
+    const user = await sequelize.query(line, {
+        nest:true,
+        type: sequelize.QueryTypes.UPDATE
+    });
+    console.log(sequelize);
+}
     
    
   
