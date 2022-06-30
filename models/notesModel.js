@@ -12,7 +12,7 @@ const Note = sequelize.define('note',{
         autoIncrement: true
     },
     text:{
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
 
     },

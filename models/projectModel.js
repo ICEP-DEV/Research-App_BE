@@ -19,12 +19,12 @@ const Project = sequelize.define('project',{
         len:{ args: [6,20], msg: "String length is not in range 6-20"},
     },
     description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
         len:{ args: [6,2000], msg: "String length is not in range 6-20"},
     },
     text: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
 
     },
     startDate: {

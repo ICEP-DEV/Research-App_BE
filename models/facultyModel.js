@@ -16,7 +16,7 @@ const Faculty = sequelize.define('faculty', {
         }
     },
     description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     },
 
 

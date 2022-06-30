@@ -13,7 +13,7 @@ const Blog = sequelize.define('blog',{
         allowNull: false
     },
     post:{
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false       
 
     },

@@ -24,7 +24,7 @@ const Appointment = sequelize.define('appointment',{
     },
     
     details: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
     }, 
     

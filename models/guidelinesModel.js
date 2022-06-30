@@ -10,7 +10,7 @@ const Guidelines = sequelize.define('guideline',{
         autoIncrement: true
     },
     text: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
     },
     name: {

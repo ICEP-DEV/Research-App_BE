@@ -10,7 +10,7 @@ const Subguide = sequelize.define('subguide', {
         autoIncrement: true
     },
     text: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
 
     },

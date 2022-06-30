@@ -15,7 +15,7 @@ const UserElement = sequelize.define('user_elements', {
         allowNull: false
     },
     content:{
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
     },
     elementId:{
         type: Sequelize.STRING

@@ -14,7 +14,7 @@ const ProjectType = sequelize.define('project_type', {
         vic: true
     },
     description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: true
     },
 

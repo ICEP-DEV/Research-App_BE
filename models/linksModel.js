@@ -15,7 +15,7 @@ const Link = sequelize.define('link',{
 
     },
     link:{
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
     },
 

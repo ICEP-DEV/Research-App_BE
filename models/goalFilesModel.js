@@ -17,7 +17,7 @@ const GoalFiles = sequelize.define('goal_files',{
     },
 
     description:{
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
     },
 
