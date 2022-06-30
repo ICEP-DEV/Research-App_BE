@@ -134,15 +134,20 @@ exports.uploadProfileImage = upload.single('photo')
 
 //exports.uploadDocument =  upload.single('document')
     
-exports.makeUserAdmin = async(req, res, next)=>{
+exports.makeUserAdmin = catchAsync(async(req, res, next)=>{
     // req.body.userId = req.user.id
-    const line = `UPDATE \`users\` SET \`userType\` = '2' WHERE \`users\`.\`id\` = 1 AND \`users\`.\`idNumber\` = '9511275418082'`;
-    const user = await sequelize.query(line, {
-        nest:true,
-        type: sequelize.QueryTypes.UPDATE
+    const body = req.body;
+    const user = await User.update(body, {where: {idNumber: req.params.idNumber}});
+    if(!user){
+        return next(new Error('Oops!Something went wrong'));
+    }
+    res.status(200).json({
+        status: "success",
+        message: "User updated successfully",
+        user
     });
-    console.log(sequelize);
-}
+});
+
     
    
   
