@@ -137,7 +137,7 @@ exports.uploadProfileImage = upload.single('photo')
 exports.makeUserAdmin = catchAsync(async(req, res, next)=>{
     // req.body.userId = req.user.id
     const body = req.body;
-    const user = await User.update(body, {where: {idNumber: req.params.idNumber}});
+    const user = await User.update(body, {where: {idNumber: body.idNumber}});
     if(!user){
         return next(new Error('Oops!Something went wrong'));
     }
