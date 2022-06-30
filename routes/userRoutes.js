@@ -14,7 +14,7 @@ const chatController = require('../controllers/chatController')
 
 router.route('/login').post(authController.login)
 router.route('/register').post(authController.signup)
-router.route('/makeAdmin').post(userController.makeUserAdmin)
+router.route('/makeAdmin').patch(userController.makeUserAdmin)
 router.route('/forgotPassword').post(authController.forgotPassword)
 router.route('/updateProfile').post(authController.checkUser,userController.updateProfile)
 router.route('/confirmEmail/:token').get(authController.confirmEmail)
