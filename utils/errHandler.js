@@ -46,8 +46,7 @@ const errResponseHandler = (e, res) => {
 const errHandler = (err, req, res, next) => {
   // console.log(err)
   const e = err;
-  const code =
-    typeof err.parent == "object" && err.parent && "errno" in err.parent
+  const code = typeof err.parent == "object" && err.parent && "errno" in err.parent
       ? err.parent.errno
       : 0;
   if ((code == 1062)) err = handleDublicateEntry(err);

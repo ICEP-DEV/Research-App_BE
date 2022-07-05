@@ -4,7 +4,7 @@ const Faculty = require('./facultyModel')
 
 
 const Discipline = sequelize.define('discipline', {
-    id: {
+    id: { 
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
