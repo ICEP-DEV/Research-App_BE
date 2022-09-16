@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 // const sequelizeTransforms = require('sequelize-transforms');
-
+// Hi there how are you doing
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(
     'researcherdna',
