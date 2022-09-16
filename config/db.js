@@ -10,7 +10,8 @@ const sequelize = new Sequelize(
   host: 'localhost',
   dialect: 'mysql' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
 });
-
+//Sho phaidi how are you doing?
+//I am doing well
 // const sequelize = new Sequelize("mysql://b752eb1a931ab8:f1dd06fb@us-cdbr-east-05.cleardb.net/heroku_53594401c782c36?reconnect=true") 
 
 //=--------------------------
