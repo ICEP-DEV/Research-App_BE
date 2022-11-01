@@ -177,3 +177,14 @@ exports.registerUser = catchAsync(async(req, res, next) =>{
     })
 
 })
+
+
+exports.loginUser = catchAsync(async(req, res, next)=>{
+    const loginUser = User.findOne({where:{email: req.body.email, password: req.body.password} })
+    if(!loginUser) return next(new Error("User does not exist"));
+    res.status(200).json({
+        status: "success",
+        message: "User Logged in",
+        user
+    });
+});
