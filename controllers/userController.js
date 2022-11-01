@@ -15,6 +15,7 @@ const Chat = require('../models/chatModel');
 
 
 
+
 exports.getAllUsers = catchAsync( async(req, res, next) =>{
     
     const users = await User.findAll({});
@@ -166,3 +167,13 @@ exports.makeUserAdmin = catchAsync(async(req, res, next)=>{
 
 }
 
+
+exports.registerUser = catchAsync(async(req, res, next) =>{
+    const newUser = await User.create(req.body);
+    res.status(200).json({
+        status: "success",
+        newUser,
+        message: "User Succefully Created proceed to login"
+    })
+
+})

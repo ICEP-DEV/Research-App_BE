@@ -23,6 +23,7 @@ router.route('/getAllUsers').get(authController.checkUser,authController.restric
 router.route('/getUser').get(authController.checkUser, userController.getUser)
 router.route('/getAllUsersWhere/:id').get(authController.checkUser, userController.getAllUsersWhere);
 router.route("/uploadPicture").post(authController.checkUser,userController.uploadProfileImage,userController.updateUser);
+router.route('/registerUser').post(userController.registerUser);
 
 
 
