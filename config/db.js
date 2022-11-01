@@ -1,16 +1,17 @@
 const Sequelize = require('sequelize')
 // const sequelizeTransforms = require('sequelize-transforms');
-
+// Hi there how are you doing
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(
     'researcherdna',
      'root',
-     '', 
+     'Aj0y2RUKMG7x', 
      {
   host: 'localhost',
   dialect: 'mysql' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
 });
-
+//Sho phaidi how are you doing?
+//I am doing well
 // const sequelize = new Sequelize("mysql://b752eb1a931ab8:f1dd06fb@us-cdbr-east-05.cleardb.net/heroku_53594401c782c36?reconnect=true") 
 
 //=--------------------------
