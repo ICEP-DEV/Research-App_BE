@@ -185,6 +185,6 @@ exports.loginUser = catchAsync(async(req, res, next)=>{
     res.status(200).json({
         status: "success",
         message: "User Logged in",
-        loginUser
+        data: loginUser
     });
 });
