@@ -25,4 +25,8 @@ router
   .route("/supervisorGetAllStudentProjectNotifications/:id/:userId")
   .get(authController.checkUser,feedbackController.supervisorGetAllStudentProjectNotifications);
 
+router
+  .route("/getAllAdministrators/:disciplineId")
+  .get(authController.checkUser, feedbackController.allAdmins);
+
 module.exports = router;

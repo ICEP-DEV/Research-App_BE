@@ -128,6 +128,32 @@ exports.CountFeedbacksForAGivenGoal = catchAsync(async(req, res, next)=>{
 //We need to be able to count the total number of notifications from each goal - 
 //Firstly select a goal
 
+exports.allSupervisors = catchAsync(async(req, res, next)=>{
+    const line = `SELECT * 
+    FROM users
+    WHERE usertype = 2
+    AND disciplineId = ${req.params.userType};`
+    const supervisors = await sequelize.query(line, {nest:true, type: sequelize.QueryTypes.SELECT})
+    res.status(200).json({
+        status: "success",
+        results: supervisors.length,
+        supervisors
+    });
+});
+
+
+exports.allAdmins = catchAsync(async(req, res, next)=>{
+    const line = `SELECT * 
+    FROM users
+    WHERE usertype = 3
+    AND disciplineId = ${req.params.userType};`
+    const administrators = await sequelize.query(line, {nest:true, type: sequelize.QueryTypes.SELECT})
+    res.status(200).json({
+        status: "success",
+        results: administrators.length,
+        administrators
+    });
+});
 
 exports.supervisorGetAllStudentProjectNotifications = catchAsync(async(req, res, next)=>{
     
