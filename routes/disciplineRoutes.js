@@ -12,4 +12,8 @@ router
   .patch(disciplineController.updateDiscipline)
   .delete(disciplineController.deleteDiscipline);
 
+router
+  .route("/faculty/:id")
+  .get(disciplineController.getFacultyDiscipline);
+
 module.exports = router;

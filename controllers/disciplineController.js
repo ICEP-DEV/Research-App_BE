@@ -54,6 +54,19 @@ exports.updateDiscipline = async(req, res, next) =>{
     })
 }
 
+exports.getFacultyDiscipline = async(req, res, next) =>{
+    const discipline  = await Discipline.findAll({
+        where: {facultyId: req.params.id}
+    })
+
+    if(!discipline[0]) return next(new Error('Document does not exist'));
+
+    res.status(200).json({
+        status: "success",
+        message: "Disciplines Found",
+        discipline
+    })
+}
 
 exports.deleteDiscipline = async(req, res, next) =>{
 
