@@ -29,4 +29,8 @@ router
   .route("/getAllAdministrators/:disciplineId")
   .get(authController.checkUser, feedbackController.allAdmins);
 
+  router
+  .route("/getAllSupervisors/:disciplineId")
+  .get(authController.checkUser, feedbackController.allSupervisors);
+
 module.exports = router;
