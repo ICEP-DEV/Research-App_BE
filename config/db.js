@@ -5,7 +5,7 @@ const Sequelize = require('sequelize')
 const sequelize = new Sequelize(
     'researcherdna',
      'root',
-     'Aj0y2RUKMG7x', 
+     '0LYpysMkoCgf', 
      {
   host: 'localhost',
   dialect: 'mysql' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
