@@ -188,3 +188,58 @@ exports.loginUser = catchAsync(async(req, res, next)=>{
         data: loginUser
     });
 });
+
+
+
+exports.assignStudentSupervisor = catchAsync(async(req, res, next)=>{
+    const line = `CALL 	assignStudentSupervisor(${req.body.projectIdreq}, ${req.body.supervisorId})`;//
+    console.log(line);
+    const response = await sequelize.query(line, {
+        nest:true,
+        type: sequelize.QueryTypes.EXEC
+    });
+    res.status(200).json({
+        status: "success",
+        message: "Change was successfull",
+        data: response
+    });
+
+})
+
+
+
+exports.getAllSupervisors = catchAsync(async(req, res, next)=>{
+    const line = `CALL getAllSupervisors(${req.params.disciplineId})`;
+    console.log(line);
+    const supervisors = await sequelize.query(line, {
+        nest:true,
+        type: sequelize.QueryTypes.EXEC
+    });
+    res.status(200).json({
+        status: "success",
+        results: supervisors.length,
+        data: supervisors
+    });
+
+})
+
+exports.adminGetNewUsers = catchAsync(async(req, res, next)=>{
+    // const line = `
+    // SET @${req.params.disciplineId};
+    // CALL \`adminGetNewUsers\`(@disciplineId);`;asdfasd
+    const line = `CALL adminGetNewUsers(${req.params.disciplineId})`;
+    console.log(line);
+    const newUsers = await sequelize.query(line, {
+        nest:true,
+        type: sequelize.QueryTypes.EXEC
+    });
+    console.log(line);
+
+    // if(!notifications)  return next(new Error('Document does not exist\n' + line));
+    
+    res.status(200).json({
+        status: "success",
+        results: newUsers.length,
+        data: newUsers
+    });
+});

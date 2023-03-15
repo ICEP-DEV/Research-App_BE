@@ -25,6 +25,10 @@ router.route('/getAllUsersWhere/:id').get(authController.checkUser, userControll
 router.route("/uploadPicture").post(authController.checkUser,userController.uploadProfileImage,userController.updateUser);
 router.route('/registerUser').post(userController.registerUser);
 router.route('/signin').post(userController.loginUser);
+router.route('/adminGetNewUsers/:disciplineId').get(userController.adminGetNewUsers);
+router.route('/getAllSupervisors/:disciplineId').get(userController.getAllSupervisors);///
+router.route('/assignStudentSupervisor').post(userController.assignStudentSupervisor);//
+
 
 
 
