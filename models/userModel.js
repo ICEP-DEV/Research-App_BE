@@ -60,7 +60,7 @@ const User = sequelize.define('user',{
                 
                 if(!idResult.valid) throw  new Error('Invalid ID number!');
                
-                this.title = idResult.gender =='male'? 'Mr' : 'Miss';
+                this.title = idResult.gender =='male'? 'Mr' : 'Ms.';
                 
               }
         }
