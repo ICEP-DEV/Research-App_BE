@@ -560,7 +560,7 @@ CREATE TABLE `users` (
   `lastName` varchar(50) NOT NULL,
   `email` varchar(250) NOT NULL,
   `password` varchar(16) NOT NULL,
-  `idNumber` char(13) NOT NULL,
+  `studNumber` char(9) NOT NULL,
   `title` varchar(10) DEFAULT NULL,
   `photo` varchar(255) NOT NULL DEFAULT 'Get the API',
   `userType` varchar(15) NOT NULL,
@@ -575,16 +575,16 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `password`, `idNumber`, `title`, `photo`, `userType`, `references`, `disciplineId`, `verified`, `createdAt`, `updatedAt`) VALUES
-(1, 'Shiko', 'Matlala', 'tsholofeloitumeleng@gmail.com', 'shikomatlala@', '9511275418082', 'Mr', 'Get the API', '2', 3, NULL, 0, '2022-03-17 09:34:15', '2022-03-17 09:34:15'),
-(2, 'Katleho', 'Makhoba', 'rkmwastaken@gmail.com', '123456', '1111111111111', NULL, 'Get the API', '', NULL, NULL, 0, '2022-03-25 15:52:50', '2022-03-25 15:52:50'),
-(3, 'Shiko', 'Matlala', 'shikomatlala2@gmail.com', '$2a$12$m6MLnMKeo', '2001114386089', 'Miss', 'default.png', '2', NULL, 1, 1, '2022-04-28 12:33:18', '2022-04-28 12:33:18'),
-(4, 'James', 'Livingston', 'workmaster42@gmail.com', '$2a$12$mgWWQUk2t', '9511275418083', 'Mr', 'default.png', '1', NULL, NULL, 0, '2022-05-04 13:42:05', '2022-05-04 13:42:05'),
-(5, 'Phindile', 'Matlala', 'phidilematlala@gmail.com', 'phidilematlala@', '9911275418082', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 09:58:12', '2022-05-16 09:58:12'),
-(6, 'Jan', 'Maponyane', 'janmaponyane@gmail.com', 'janmaponyane@', '8711275418082', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 09:59:52', '2022-05-16 09:59:52'),
-(7, 'Thatohatsi', 'Mabapa', 'thatomabapa@gmail.com', 'thatomabapa@', '9611275418082', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 10:02:32', '2022-05-16 10:02:32'),
-(8, 'Thandi', 'Mohlahlo', 'thandimohlahlo@gmail.com', 'thandimohlahlo@', '0011275418082', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 10:04:46', '2022-05-16 10:04:46'),
-(9, 'Makape', 'Tema', 'makapetema@gmail.com', 'makapetema@', '9811275418082', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 10:04:46', '2022-05-16 10:04:46');
+INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `password`, `studNumber`, `title`, `photo`, `userType`, `references`, `disciplineId`, `verified`, `createdAt`, `updatedAt`) VALUES
+(1, 'Shiko', 'Matlala', 'tsholofeloitumeleng@gmail.com', 'shikomatlala@', '951127541', 'Mr', 'Get the API', '2', 3, NULL, 0, '2022-03-17 09:34:15', '2022-03-17 09:34:15'),
+(2, 'Katleho', 'Makhoba', 'rkmwastaken@gmail.com', '123456', '111111111', NULL, 'Get the API', '', NULL, NULL, 0, '2022-03-25 15:52:50', '2022-03-25 15:52:50'),
+(3, 'Shiko', 'Matlala', 'shikomatlala2@gmail.com', '$2a$12$m6MLnMKeo', '200111438', 'Ms', 'default.png', '2', NULL, 1, 1, '2022-04-28 12:33:18', '2022-04-28 12:33:18'),
+(4, 'James', 'Livingston', 'workmaster42@gmail.com', '$2a$12$mgWWQUk2t', '951127541', 'Mr', 'default.png', '1', NULL, NULL, 0, '2022-05-04 13:42:05', '2022-05-04 13:42:05'),
+(5, 'Phindile', 'Matlala', 'phidilematlala@gmail.com', 'phidilematlala@', '991127541', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 09:58:12', '2022-05-16 09:58:12'),
+(6, 'Jan', 'Maponyane', 'janmaponyane@gmail.com', 'janmaponyane@', '871127541', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 09:59:52', '2022-05-16 09:59:52'),
+(7, 'Thatohatsi', 'Mabapa', 'thatomabapa@gmail.com', 'thatomabapa@', '961127541', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 10:02:32', '2022-05-16 10:02:32'),
+(8, 'Thandi', 'Mohlahlo', 'thandimohlahlo@gmail.com', 'thandimohlahlo@', '001127541', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 10:04:46', '2022-05-16 10:04:46'),
+(9, 'Makape', 'Tema', 'makapetema@gmail.com', 'makapetema@', '981127541', NULL, 'Get the API', '1', NULL, 7, 1, '2022-05-16 10:04:46', '2022-05-16 10:04:46');
 
 --
 -- Indexes for dumped tables
@@ -751,10 +751,10 @@ ALTER TABLE `subguides`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`,`idNumber`),
+  ADD PRIMARY KEY (`id`,`studNumber`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `idNumber` (`idNumber`,`userType`),
-  ADD UNIQUE KEY `unique_index_for_user` (`idNumber`,`userType`),
+  ADD UNIQUE KEY `studNumber` (`studNumber`,`userType`),
+  ADD UNIQUE KEY `unique_index_for_user` (`studNumber`,`userType`),
   ADD KEY `references` (`references`),
   ADD KEY `departmentId` (`disciplineId`);
 

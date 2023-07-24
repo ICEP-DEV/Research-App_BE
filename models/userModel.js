@@ -48,17 +48,17 @@ const User = sequelize.define('user',{
 
     },
 
-    idNumber:{
+    studNumber:{
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
         
         validate: {
-            len: {args: [13,13], msg: 'Incorrect ID number length'},
+            len: {args: [9,9], msg: 'Incorrect student number length'},
             isCorrectId(value) {
-                const idResult = idvalidater.validateIdNumber(value)
+                const idResult = idvalidater.validatestudNumber(value)
                 
-                if(!idResult.valid) throw  new Error('Invalid ID number!');
+                if(!idResult.valid) throw  new Error('Invalid student number!');
                
                 this.title = idResult.gender =='male'? 'Mr' : 'Ms.';
                 
@@ -124,13 +124,13 @@ module.exports = User;
 //     `lastName` VARCHAR(50) NOT NULL,
 //     `email` VARCHAR(250) UNIQUE NOT NULL,
 //     `password` VARCHAR(16) NOT NULL,
-//     `idNumber` CHAR(13) NOT NULL,
+//     `studNumber` CHAR(13) NOT NULL,
 //     `title` VARCHAR(10),
 //     `photo` VARCHAR(255) NOT NULL DEFAULT "Get the API",
 //     `userType`  VARCHAR(15) NOT NULL,
 //     `references` INT(10),
-//     PRIMARY KEY(`id`, `idNumber`),
-//     UNIQUE (`idNumber`, `userType`),
+//     PRIMARY KEY(`id`, `studNumber`),
+//     UNIQUE (`studNumber`, `userType`),
 //     FOREIGN KEY (`references`) REFERENCES users(`id`)
     
 // );

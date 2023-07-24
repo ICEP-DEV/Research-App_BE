@@ -68,6 +68,13 @@ CREATE TABLE `user`
     
 );
 
+INSERT INTO `users` (`id`, `firstName`, `lastName`, `email`, `password`, `studNumber`, `title`, `photo`, `userType`, `references`, `disciplineId`, `verified`, `createdAt`, `updatedAt`) VALUES
+(1, 'Shiko', 'Matlala', 'tsholofeloitumeleng@gmail.com', 'shikomatlala@', '9511275417087', 'Mr', 'Get the API', '2', 3, NULL, 0, '2022-03-17 09:34:15', '2022-03-17 09:34:15'),
+1, 'Vanesasa', 'Maluleka', 'musa67@gmail.com', 'Vanessa98@', '9801140707086', 'Ms', 'Get the API', '2', 3, NULL, 0, '2022-03-17 09:34:15', '2022-03-17 09:34:15');
+
+--INSERT INTO 'user' (`userId`, `firstName`, `lastName`,  `email`, `password`, `idNumber`, `title`, `photo`, `userType`,`references`) VALUES
+--(1, 'Vanesasa', 'Maluleka', 'musa67@gmail.com', 'Vanessa98@', '9801140707086', 'Ms', )
+
 
 -- CREATE TABLE `user_usertype`
 -- (
